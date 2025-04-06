@@ -1,82 +1,96 @@
 import Navbar from './Navbar';
 import Attraction from './Attraction';
 import History from './history';
+import Footer from './footer';
 import './index.css';
 
 import { useNavigate } from 'react-router-dom';
+
 function Home() {
   const navigate = useNavigate();
   return (
-    <div className="home">
+    <div className="home text-white">
       <Navbar />
-      <section className="home" id="home">
-        <div className="home_text mt-10">
+
+      {/* Hero Section */}
+      <section
+        className="flex flex-col items-center justify-center px-4 md:flex-row md:justify-between md:px-12 lg:px-24"
+        id="home"
+      >
+        <div className="home_text mt-10 text-center md:text-left">
           <h1
-            className="text-5xl font-bold text-white"
+            className="text-4xl font-bold sm:text-5xl"
             data-aos="fade-right"
-            data-aos-fadeduration="1600"
+            data-aos-fadeduration="1500"
           >
             InKurdistan
           </h1>
           <p
-            className="decription"
+            className="mt-4 text-lg sm:text-xl"
             data-aos="fade-up"
             data-aos-fadeduration="1800"
           >
-            Kurdistan: A Land of Beauty and Heritag <br />
-            Kurdistan blends stunning landscapes, ancient history,
-            <br />
+            Kurdistan: A Land of Beauty and Heritage <br />
+            Kurdistan blends stunning landscapes, ancient history, <br />
             and vibrant culture, offering unforgettable experiences and warm
             hospitality.
           </p>
         </div>
 
-        <div className="img">
+        {/* Map Image */}
+        <div className="mt-6 w-full max-w-xs md:max-w-md lg:max-w-lg">
           <img
             src="src/assets/images/kurdistan_map.png"
-            alt="logo"
+            alt="Kurdistan Map"
+            className="h-auto w-full"
             data-aos="zoom-in"
             data-aos-fadeduration="2000"
           />
         </div>
       </section>
-      <section className="city mt-11" id="city">
-        <div className="cards" data-aos="fade-up" data-aos-duration="2000">
-          <div className="card">
-            <img
-              src="/src/assets/images/erbil.jpg"
-              alt="erbil"
-              className="card_img1"
-              onClick={() => navigate('/erbil')}
-            />
-          </div>
-          <div className="card">
-            <img
-              src="src/assets/images/suli.jpg"
-              alt="suli"
-              className="card_img2"
-            />
-          </div>
-          <div className="card">
-            <img
-              src="src/assets/images/duhok.jpg"
-              alt="duhok"
-              className="card_img3"
-            />
-          </div>
-          <div className="card">
-            <img
-              src="src/assets/images/halabja.jpg"
-              alt="suli"
-              className="card_img4"
-            />
-          </div>
+
+      {/* City Cards */}
+      <section className="city mt-11 px-4 sm:px-10 lg:px-24" id="city">
+        <div
+          className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4"
+          data-aos="fade-up"
+          data-aos-duration="2000"
+        >
+          {/* City Cards */}
+          {[
+            {
+              src: 'src/assets/images/erbil.jpg',
+              alt: 'Erbil',
+              path: '/erbil',
+            },
+            { src: 'src/assets/images/suli.jpg', alt: 'Sulaimani', path: '' },
+            { src: 'src/assets/images/duhok.jpg', alt: 'Duhok', path: '' },
+            { src: 'src/assets/images/halabja.jpg', alt: 'Halabja', path: '' },
+          ].map((city, index) => (
+            <div
+              key={index}
+              className="relative cursor-pointer rounded-lg shadow-lg transition-all duration-300 hover:-translate-y-4 hover:scale-105 hover:tracking-widest"
+            >
+              <img
+                src={city.src}
+                alt={city.alt}
+                className="h-48 w-full rounded-lg object-cover"
+                onClick={() => city.path && navigate(city.path)}
+              />
+              <p className="absolute bottom-2 left-2 rounded bg-black bg-opacity-70 px-2 py-1 text-sm text-white">
+                {city.alt}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
+      {/* Other Sections */}
       <Attraction />
-      <hr className="w-5/2" />
+      <hr className="w-5/2 border-gray-600" />
       <History />
+      <hr className="w-5/2 border-gray-600" />
+      <Footer />
     </div>
   );
 }

@@ -10,7 +10,7 @@ const images = [
 
 function Attraction() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isfavorite, setfavorite] = useState(false);
+  const [isfavorite, setfavorite] = useState(false); // to favorite button on images
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -32,10 +32,16 @@ function Attraction() {
     <section className="Attraction py-10" id="Attraction">
       <div
         className="mb-6 text-center"
-        data-aos="fade-up"
-        data-aos-duration="2000"
+        data-aos="fade-down"
+        data-aos-duration="1000"
       >
-        <h1 className="text-4xl font-bold">Attractions</h1>
+        <h1
+          className="text-4xl font-bold"
+          data-aos="fade-up"
+          data-aos-duration="1000"
+        >
+          Attractions
+        </h1>
         <p className="mt-2 text-gray-600">
           Kurdistan is a land of beauty and heritage, offering a wide range of
           attractions for visitors to explore. From ancient ruins and historical
@@ -52,13 +58,13 @@ function Attraction() {
         {/* Previous Button */}
         <button
           onClick={prevSlide}
-          className="absolute left-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black bg-opacity-60 text-white shadow-lg transition-all hover:scale-110"
+          className="absolute left-12 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black bg-opacity-60 text-white shadow-lg transition-all hover:scale-110"
         >
           ◀
         </button>
 
         {/* Image Container with Text Overlay */}
-        <div className="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-gray-700 shadow-lg">
+        <div className="relative w-full max-w-5xl overflow-hidden rounded-2xl border border-gray-700 shadow-lg">
           <img
             src={images[currentIndex].src}
             alt="Attraction"
@@ -81,7 +87,7 @@ function Attraction() {
         {/* Next Button */}
         <button
           onClick={nextSlide}
-          className="absolute right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black bg-opacity-60 text-white shadow-lg transition-all hover:scale-110"
+          className="absolute right-14 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black bg-opacity-60 text-white shadow-lg transition-all hover:scale-110"
         >
           ▶
         </button>

@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "name": "Basilico",
+    "cuisine": "Italian, European",
+    "location": "Empire Street, Erbil, Iraq",
+    "lat": 36.190889,
+    "lng": 44.007663,
+    "image": "src/pages/erbil_content/images/basilico-the-italian.webp"
+  },
+  {
+    "id": 2,
+    "name": "Buffalo Wings & Rings",
+    "cuisine": "American, Bar",
+    "location": "Gulan Street, Erbil, Iraq",
+    "lat": 36.201565,
+    "lng": 44.009234,
+    "image": "buffalo.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Café Moka",
+    "cuisine": "Cafe, International",
+    "location": "Gulan Street, Erbil, Iraq",
+    "lat": 36.201565,
+    "lng": 44.009234,
+    "image": "moka.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Kurdish Restaurant",
+    "cuisine": "Kurdish, Middle Eastern",
+    "location": "Erbil Citadel, Erbil, Iraq",
+    "lat": 36.190889,
+    "lng": 44.007663,
+    "image": "kurdish.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Sushi House",
+    "cuisine": "Japanese, Sushi",
+    "location": "Gulan Street, Erbil, Iraq",
+    "lat": 36.201565,
+    "lng": 44.009234,
+    "image": "sushi.jpg"
+  },
+  {
+    "id": 6,
+    "name": "Tandoor House",
+    "cuisine": "Indian, Asian",
+    "location": "Gulan Street, Erbil, Iraq",
+    "lat": 36.201565,
+    "lng": 44.009234,
+    "image": "tandoor.jpg"
+  },
+  {
+    "id": 7,
+    "name": "Zaitoon Restaurant",
+    "cuisine": "Middle Eastern, Grill",
+    "location": "Gulan Street, Erbil, Iraq",
+    "lat": 36.201565,
+    "lng": 44.009234,
+    "image": "zaitoon.jpg"
+  }
+]

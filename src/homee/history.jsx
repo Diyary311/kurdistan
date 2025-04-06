@@ -7,7 +7,13 @@ function History() {
   return (
     <section className="Culture&History" id="Culture&History">
       <header className="py-4 text-white">
-        <h1 className="text-center text-3xl font-bold">Culture&History</h1>
+        <h1
+          className="text-center text-3xl font-bold"
+          data-aos="fade-up"
+          data-aos-duration="0.8s"
+        >
+          Culture&History
+        </h1>
         <h1 className="ml-4 mt-20 text-4xl">History of Kurdistan</h1>
         <p className="ml-4 justify-start align-middle text-xl">
           Kurdistan, the historical homeland of the Kurds, is a mountainous
