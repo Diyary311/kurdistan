@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - InKurdistan</title>
+    <link rel="stylesheet" href="login.css">
+    <style>
+        /* Updated CSS */
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+    
+        .user-management {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+    
+        .form-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    
+        .user-list {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+    
+        .table-container {
+            flex: 1;
+            overflow-x: hidden;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+    
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            position: relative;
+        }
+    
+        thead {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 2;
+            box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+        }
+    
+        th, td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            width: 25%;
+        }
+    
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+    
+        /* Scrollbar Styling */
+        .table-container::-webkit-scrollbar {
+            width: 8px;
+        }
+    
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+    
+        .table-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+    
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+    /* Rest of your existing styles remain the same */
+    .action-buttons button {
+        margin-right: 0.5rem;
+        padding: 0.3rem 0.8rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .form-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    #submitBtn {
+        background: #4CAF50;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #submitBtn:hover {
+        background: #45a049;
+    }
+
+    .cancel-btn {
+        background: #ff9800;
+        color: white;
+        display: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+    }
+
+    .cancel-btn:hover {
+        background: #f57c00;
+    }
+
+    .form-group {
+        display: grid;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .edit-btn {
+        background: #4CAF50;
+        color: white;
+    }
+
+    .delete-btn {
+        background: #f44336;
+        color: white;
+    }
+
+    #loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+    }
+
+    .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+}
+
+.action-buttons button {
+    white-space: nowrap; /* Prevent button text wrapping */
+}
+
+/* Adjust column widths */
+th:nth-child(4),
+td:nth-child(4) {
+    width: 30%; /* Increase width for Actions column */
+}
+
+th:nth-child(-n+3),
+td:nth-child(-n+3) {
+    width: 23.33%; /* Adjust other columns */
+}
+</style>
+</head>
+
+<body>
+    <div class="admin-container">
+        <h1>User Management Panel</h1>
+
+        <div class="user-management">
+            <!-- User Form Section -->
+            <div class="form-section">
+                <h3 id="formTitle">Add New User</h3>
+                <form id="userForm">
+                    <input type="hidden" id="userId">
+
+                    <div class="form-group">
+                        <label>Username:</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <!-- 🔽 Removed <br> tags (use CSS margin instead) -->
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password:</label>
+                        <input type="password" id="password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Role:</label>
+                        <select id="role" required>
+                            <option value="Admin">Admin</option>
+                            <option value="User">Normal User</option>
+                        </select>
+                    </div>
+                    <br>
+
+                    <div class="form-buttons">
+                        <button type="submit" id="submitBtn">Add User</button>
+                        <button type="button" id="cancelBtn" class="cancel-btn">Cancel</button>
+                    </div>
+                    <!-- 🔽 Added error message container -->
+                    <div class="error-message" id="errorMessage"></div>
+                    <div class="success-message" id="message"></div>
+                </form>
+            </div>
+
+            <!-- User List Section -->
+            <div class="user-list">
+                <h3>Existing Users</h3>
+                <div id="loading">Loading users...</div>
+                <div class="table-container">
+                    <table id="userTable">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userListBody">
+                            <!-- Users will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 🔽 API Configuration
+        const API_URL = 'https://localhost:7005/api/users';
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+
+        let editUserId = null;
+        const cancelBtn = document.getElementById('cancelBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const formTitle = document.getElementById('formTitle');
+
+        // 🔽 Cancel button handler
+        cancelBtn.addEventListener('click', () => {
+            resetForm();
+            toggleEditUI(false);
+        });
+
+        // 🔽 Toggle UI between edit/add modes
+        function toggleEditUI(isEditing) {
+            cancelBtn.style.display = isEditing ? 'block' : 'none';
+            submitBtn.textContent = isEditing ? 'Update User' : 'Add User';
+            formTitle.textContent = isEditing ? 'Edit User' : 'Add New User';
+        }
+
+        // 🔽 Get all users from API
+        async function fetchUsers() {
+            try {
+                showLoading();
+                const response = await fetch(API_URL, { headers });
+                if (!response.ok) throw new Error('Failed to fetch users');
+                return await response.json();
+            } catch (error) {
+                showError(error.message);
+                return [];
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // 🔽 Unified save/update user function
+        async function saveUser(userData, isEdit = false) {
+            try {
+                showLoading();
+                const url = isEdit ? `${API_URL}/${editUserId}` : API_URL;
+                const method = isEdit ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method,
+                    headers,
+                    body: JSON.stringify({
+                        username: userData.username,
+                        email: userData.email,
+                        password: userData.password,
+                        role: userData.role
+                    })
+                });
+
+                const text = await response.text();
+                const data = text ? JSON.parse(text) : null;
+
+                if (!response.ok) {
+                    throw new Error(data?.error || data?.title || 'Operation failed');
+                }
+
+                return data;
+            } catch (error) {
+                showError(error.message);
+                return null;
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // 🔽 Delete user function
+        window.deleteUser = async (id) => {
+            try {
+                if (!confirm('Are you sure you want to delete this user?')) return;
+
+                showLoading();
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE',
+                    headers
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Delete failed');
+                }
+
+                await renderUsers();
+                showMessage('User deleted successfully!');
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                hideLoading();
+            }
+        };
+
+        // 🔽 Initialize user table with API data
+        async function renderUsers() {
+            const users = await fetchUsers();
+            const tbody = document.getElementById('userListBody');
+            tbody.innerHTML = '';
+
+            users.forEach(user => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${user.username}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role}</td>
+                    <td class="action-buttons">
+                        <button class="edit-btn" onclick="editUser(${user.id})">Edit</button>
+                        <button class="delete-btn" onclick="deleteUser(${user.id})">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 🔽 Form submission handler
+        document.getElementById('userForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const userData = {
+                username: document.getElementById('username').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                password: document.getElementById('password').value,
+                role: document.getElementById('role').value
+            };
+
+            const password = document.getElementById('password').value;
+    if (password) {
+        userData.password = password;
+    }
+
+
+            const savedUser = await saveUser(userData, !!editUserId);
+            if (savedUser) {
+                showMessage(`User ${editUserId ? 'updated' : 'added'} successfully!`);
+                resetForm();
+                await renderUsers();
+            }
+        });
+
+        // 🔽 Edit user handler
+        window.editUser = async (id) => {
+            try {
+                showLoading();
+                const response = await fetch(`${API_URL}/${id}`, { headers });
+                if (!response.ok) throw new Error('User not found');
+
+                const user = await response.json();
+                document.getElementById('username').value = user.username;
+                document.getElementById('email').value = user.email;
+                document.getElementById('role').value = user.role;
+                editUserId = user.id;
+
+                toggleEditUI(true);
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                hideLoading();
+            }
+        };
+
+        // Helper functions
+        function resetForm() {
+            document.getElementById('userForm').reset();
+            editUserId = null;
+            toggleEditUI(false);
+        }
+
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            setTimeout(() => errorElement.style.display = 'none', 5000);
+        }
+
+        function showMessage(message) {
+            const successElement = document.getElementById('message');
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+            setTimeout(() => successElement.style.display = 'none', 5000);
+        }
+
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        // Initial load
+        renderUsers();
+    </script>
+</body>
+
+</html>

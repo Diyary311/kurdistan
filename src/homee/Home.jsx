@@ -6,8 +6,21 @@ import './index.css';
 
 import { useNavigate } from 'react-router-dom';
 
+import { useEffect } from 'react'; // Add this at the top  I
+
 function Home() {
   const navigate = useNavigate();
+
+  // Add this useEffect hook    I
+
+  /*
+  useEffect(() => {
+    fetch('https://localhost:7005/api/test')
+      .then(res => res.text())
+      .then(data => console.log("BACKEND CONNECTION:", data))
+      .catch(err => console.error("CONNECTION ERROR:", err));
+  }, []);
+*/
   return (
     <div className="home text-white">
       <Navbar />

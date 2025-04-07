@@ -8,14 +8,14 @@ namespace InKurdistan.Data
         {
             if (!context.Users.Any())
             {
-                var adminUser = new User
+                context.Users.Add(new User
                 {
                     Username = "admin",
                     Email = "admin@inkurdistan.com",
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("1234"),
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin1234"),
                     Role = "Admin"
-                };
-                context.Users.Add(adminUser);
+                });
+
                 context.SaveChanges();
             }
         }
