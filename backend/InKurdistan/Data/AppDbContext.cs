@@ -20,8 +20,12 @@ namespace InKurdistan.Data
 
         // Optional: Model configuration
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            // Add any custom model configurations here
+        { // Fix decimal precision for City.Area
+            modelBuilder.Entity<City>()
+                .Property(c => c.Area)
+                .HasPrecision(18, 2);
+
+      
         }
     }
 }

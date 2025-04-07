@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InKurdistan.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250327211429_InitialSetup")]
-    partial class InitialSetup
+    [Migration("20250408012102_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,9 +47,6 @@ namespace InKurdistan.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SubCityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -57,8 +54,6 @@ namespace InKurdistan.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
-
-                    b.HasIndex("SubCityId");
 
                     b.ToTable("Attractions");
                 });
@@ -72,6 +67,7 @@ namespace InKurdistan.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal?>("Area")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Description")
@@ -102,10 +98,7 @@ namespace InKurdistan.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -114,8 +107,6 @@ namespace InKurdistan.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
 
                     b.ToTable("SubCities");
                 });
@@ -152,36 +143,12 @@ namespace InKurdistan.Migrations
             modelBuilder.Entity("InKurdistan.Models.Attraction", b =>
                 {
                     b.HasOne("InKurdistan.Models.City", "City")
-                        .WithMany("Attractions")
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("InKurdistan.Models.SubCity", "SubCity")
                         .WithMany()
-                        .HasForeignKey("SubCityId");
-
-                    b.Navigation("City");
-
-                    b.Navigation("SubCity");
-                });
-
-            modelBuilder.Entity("InKurdistan.Models.SubCity", b =>
-                {
-                    b.HasOne("InKurdistan.Models.City", "City")
-                        .WithMany("SubCities")
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("City");
-                });
-
-            modelBuilder.Entity("InKurdistan.Models.City", b =>
-                {
-                    b.Navigation("Attractions");
-
-                    b.Navigation("SubCities");
                 });
 #pragma warning restore 612, 618
         }

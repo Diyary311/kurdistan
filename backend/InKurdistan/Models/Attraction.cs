@@ -16,8 +16,6 @@ namespace InKurdistan.Models
         public int CityId { get; set; }
         public City City { get; set; }
 
-        [ForeignKey("SubCity")]
-        public int? SubCityId { get; set; }
-        public SubCity SubCity { get; set; }
+      
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InKurdistan.Models
 {
@@ -9,10 +10,11 @@ namespace InKurdistan.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public int? Population { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
         public decimal? Area { get; set; }
         public string ImagePath { get; set; }
 
-        public List<SubCity> SubCities { get; set; }
-        public List<Attraction> Attractions { get; set; }
+        
     }
 }

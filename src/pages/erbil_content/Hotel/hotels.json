@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "name": "Divan Erbil Hotel",
+    "location": "Central Erbil, 100m from Citadel",
+    "price": 120,
+    "rating": 4.8,
+    "image": "https://source.unsplash.com/random/400x300/?hotel,erbil,1",
+    "specialOffer": true,
+    "description": "Luxury 5-star hotel with panoramic views of the Erbil Citadel",
+    "amenities": ["Free WiFi", "Swimming Pool", "Spa", "Restaurant"]
+  },
+  {
+    "id": 2,
+    "name": "Rotana Hotel",
+    "location": "Gulan Street, Downtown",
+    "price": 180,
+    "rating": 4.9,
+    "image": "https://source.unsplash.com/random/400x300/?luxury,hotel,2",
+    "specialOffer": false,
+    "description": "Modern business hotel in the heart of Erbil's commercial district",
+    "amenities": ["Business Center", "Gym", "Free Parking", "Room Service"]
+  },
+  {
+    "id": 3,
+    "name": "Erbil View Hotel",
+    "location": "Ainkawa District",
+    "price": 95,
+    "rating": 4.5,
+    "image": "https://source.unsplash.com/random/400x300/?hotel,view,3",
+    "specialOffer": true,
+    "description": "Comfortable mid-range hotel with excellent city views",
+    "amenities": ["Free WiFi", "Airport Shuttle", "Breakfast Included"]
+  },
+  {
+    "id": 4,
+    "name": "Royal Tulip Erbil",
+    "location": "100 Meter Road",
+    "price": 210,
+    "rating": 4.7,
+    "image": "https://source.unsplash.com/random/400x300/?hotel,luxury,4",
+    "specialOffer": false,
+    "description": "Ultra-luxurious hotel with world-class amenities",
+    "amenities": ["Spa", "Multiple Restaurants", "Concierge", "Valet Parking"]
+  },
+  {
+    "id": 5,
+    "name": "City Center Hotel",
+    "location": "Near Family Mall",
+    "price": 85,
+    "rating": 4.3,
+    "image": "https://source.unsplash.com/random/400x300/?hotel,city,5",
+    "specialOffer": true,
+    "description": "Affordable comfort in central location",
+    "amenities": ["Free WiFi", "24-hour Front Desk", "Laundry Service"]
+  }
+]

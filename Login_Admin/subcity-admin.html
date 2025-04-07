@@ -5,6 +5,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subcity Management</title>
+    <!-- Add this script section before </body> -->
+    <script>
+        document.getElementById('subcityForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData();
+            formData.append('name', document.getElementById('subcityName').value);
+            formData.append('image', document.getElementById('subcityImage').files[0]);
+
+            try {
+                const response = await fetch('/api/SubCities', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('Server error');
+
+                const newSubCity = await response.json();
+                addSubCityCard(newSubCity);
+                document.getElementById('subcityForm').reset();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error saving subcity');
+            }
+        });
+
+        function addSubCityCard(subCity) {
+            const grid = document.querySelector('.subcity-grid');
+
+            const card = document.createElement('div');
+            card.className = 'subcity-card';
+            card.innerHTML = `
+            <img src="${subCity.imageUrl}" alt="${subCity.name}">
+            <h3>${subCity.name}</h3>
+            <div class="action-buttons">
+                <button>Edit</button>
+                <button>Delete</button>
+            </div>
+        `;
+
+            grid.appendChild(card);
+        }
+
+        // Load existing subcities on page load
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('/api/SubCities');
+                const subCities = await response.json();
+                subCities.forEach(addSubCityCard);
+            } catch (error) {
+                console.error('Error loading subcities:', error);
+            }
+        });
+    </script>
+
     <style>
         /* Navigation Styles */
 
@@ -86,9 +141,12 @@
 
         /* Grid Layout */
         .subcity-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
+            .subcity-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 2rem;
+                margin-top: 2rem;
+            }
         }
 
         .subcity-card {

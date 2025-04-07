@@ -4,7 +4,7 @@ import Home from './homee/home';
 import Erbil from './pages/erbil';
 import Resturants from './pages/erbil_content/resturants';
 import HistoryContent from './pages/historyContent';
-
+import Hotel from './pages/erbil_content/Hotel/Hotel';
 function App() {
   return (
     <Router>
@@ -14,6 +14,8 @@ function App() {
         <Route path="/Erbil" element={<Erbil />} />
 
         <Route path="/resturants" element={<Resturants />} />
+
+        <Route path="/hotels" element={<Hotel />} />
       </Routes>
     </Router>
   );

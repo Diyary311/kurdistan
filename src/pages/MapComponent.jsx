@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import PropTypes from 'prop-types'; // Add this
-
+import FitBounds from './erbil_content/FitBound';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -19,19 +19,23 @@ L.Icon.Default.mergeOptions({
 const MapComponent = ({ restaurants }) => {
   return (
     <MapContainer
-      center={[36.190889, 44.007663]}
+      center={[36.190889, 44.007663]} // fallback center
       zoom={13}
       style={{ height: '400px', width: '100%' }}
+      scrollWheelZoom={true}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+
       {restaurants.map((restaurant) => (
         <Marker key={restaurant.id} position={[restaurant.lat, restaurant.lng]}>
           <Popup>{restaurant.name}</Popup>
         </Marker>
       ))}
+
+      <FitBounds restaurants={restaurants} />
     </MapContainer>
   );
 };

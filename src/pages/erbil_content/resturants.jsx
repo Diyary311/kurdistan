@@ -6,19 +6,28 @@ function Resturants() {
   return (
     <div>
       <Navbar />
-      <div className="flex min-h-screen items-start p-5">
-        <h1 className="absolute left-1/2 top-0 mt-20 -translate-x-1/2 text-center text-5xl font-bold font-semibold text-green-500">
-          Resturants in Erbil
+      <div className="container mx-auto p-4">
+        {/* Page Title */}
+        <h1
+          data-aos="fade-up"
+          data-aos-fadeduration="1800"
+          className="mb-8 mt-32 text-center text-3xl font-bold text-green-500 sm:text-4xl md:text-5xl"
+        >
+          Restaurants in Erbil
         </h1>
 
-        {/* filter section */}
-        <section className="mt-44 h-56 w-56">
-          <FilterBox />
-        </section>
+        {/* Main content: FilterBox and RestaurantList */}
+        <div className="flex flex-col gap-4 md:flex-row">
+          {/* Filter Section */}
+          <div className="md:w-1/4">
+            <FilterBox />
+          </div>
 
-        <section className="ml-56 mt-20 mt-32 w-full">
-          <RestaurantList />
-        </section>
+          {/* Restaurant List Section */}
+          <div className="md:w-3/4">
+            <RestaurantList />
+          </div>
+        </div>
       </div>
     </div>
   );
