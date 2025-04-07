@@ -1,5 +1,7 @@
 using InKurdistan.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics; // Add this
 
 namespace InKurdistan
 {
@@ -17,11 +19,15 @@ namespace InKurdistan
             {
                 options.AddPolicy("ReactFrontend", policy =>
                 {
-                    policy.WithOrigins("http://localhost:5173")
+                    policy.WithOrigins("http://localhost:5173", "http://localhost:5174")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });
             });
+
+            // Add Authentication (Required for Authorization)
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme) // Simple scheme for now
+                .AddJwtBearer(options => { }); // Empty config for testing
 
             // Database configuration
             builder.Services.AddDbContext<AppDbContext>(options =>
@@ -37,7 +43,11 @@ namespace InKurdistan
                 SeedData.Initialize(services.GetRequiredService<AppDbContext>());
             }
 
-            if (!app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
             {
                 app.UseExceptionHandler("/error");
                 app.UseHsts();
@@ -49,9 +59,22 @@ namespace InKurdistan
 
             // Middleware order is critical
             app.UseCors("ReactFrontend");
-            app.UseAuthentication(); // Add this
+            app.UseAuthentication(); // Now properly configured
             app.UseAuthorization();
-            app.MapControllers(); // Add this line
+
+            app.UseExceptionHandler(errorApp => {
+                errorApp.Run(async context => {
+                    context.Response.ContentType = "application/json";
+                    var error = context.Features.Get<IExceptionHandlerFeature>();
+                    await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(new
+                    {
+                        error = error?.Error.Message
+                    }));
+                });
+            });
+
+            app.MapControllers();
+            app.MapGet("/api/test", () => "Backend is connected!");
 
             app.MapGet("/api/test", () => "Backend is connected!");
             app.Run();
