@@ -10,31 +10,50 @@ namespace InKurdistan
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllers();
 
-            // ? Add this INSIDE the Main method, right after AddControllersWithViews()
+            // Add CORS policy for React frontend
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("ReactFrontend", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
+            // Database configuration
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(
                     builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 
-            // Rest of the code remains the same...
+            // Seed database
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                SeedData.Initialize(services.GetRequiredService<AppDbContext>());
+            }
+
             if (!app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/error");
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+
+            // Middleware order is critical
+            app.UseCors("ReactFrontend");
+            app.UseAuthentication(); // Add this
             app.UseAuthorization();
+            app.MapControllers(); // Add this line
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-
+            app.MapGet("/api/test", () => "Backend is connected!");
             app.Run();
         }
     }

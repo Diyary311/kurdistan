@@ -100,9 +100,13 @@ const Navbar = () => {
             </>
           )}
           <li>
-            <button className="ml-6 rounded-full bg-blue-700 px-4 py-2 text-white transition-all duration-300 hover:border-blue-50 hover:bg-transparent sm:rounded-full">
-              Login/sign
+            <button
+              className="ml-6 rounded-full bg-blue-700 px-4 py-2 text-white transition-all duration-300 hover:border-blue-50 hover:bg-transparent sm:rounded-full"
+              onClick={() => window.location.href = '/Login_Admin/login.html'}
+            >
+              Login/Sign
             </button>
+
           </li>
         </ul>
 

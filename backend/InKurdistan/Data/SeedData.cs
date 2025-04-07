@@ -12,7 +12,7 @@ namespace InKurdistan.Data
                 {
                     Username = "admin",
                     Email = "admin@inkurdistan.com",
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("1234"),
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin1234"),
                     Role = "Admin"
                 };
                 context.Users.Add(adminUser);
