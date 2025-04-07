@@ -13,12 +13,15 @@ function Buttons() {
         >
           restaurants
         </button>
-        <button className="cursor-pointer border-white bg-green-500 transition-all duration-700 hover:-translate-y-5 hover:bg-transparent hover:font-semibold hover:tracking-widest hover:text-green-500">
+        <button
+          onClick={() => navigate('/hotels')}
+          className="cursor-pointer border-white bg-green-500 transition-all duration-700 hover:-translate-y-5 hover:bg-transparent hover:font-semibold hover:tracking-widest hover:text-green-500"
+        >
           Hotels
         </button>
 
         <button className="cursor-pointer border-white bg-green-500 transition-all duration-700 hover:-translate-y-5 hover:bg-transparent hover:font-semibold hover:tracking-widest hover:text-green-500">
-          Map
+          Subcitys
         </button>
 
         <button className="cursor-pointer border-white bg-green-500 transition-all duration-700 hover:-translate-y-5 hover:bg-transparent hover:font-semibold hover:tracking-widest hover:text-green-500">

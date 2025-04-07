@@ -39,7 +39,7 @@ const Erbil = () => {
     <div>
       <Navbar />
       <div className="title" data-aos="fade-up" data-aos-fadeduration="1600">
-        <h1 className="absolute left-1/2 top-0 mt-12 -translate-x-1/2 transform text-center text-5xl font-bold text-green-500">
+        <h1 className="absolute left-1/2 top-0 mb-24 mt-20 -translate-x-1/2 transform text-center text-5xl font-bold text-green-500">
           Erbil
         </h1>
 
@@ -72,7 +72,7 @@ const Erbil = () => {
 
         {/* about section */}
 
-        <section className="text- mt-10 text-center text-lg">
+        <section className="text- mt-32 text-center text-lg">
           <h1
             className="h1 w-fit rounded-lg border border-white bg-black bg-opacity-30 px-4 py-2 font-bold text-green-500"
             data-aos="fade-up"
