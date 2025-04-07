@@ -15,7 +15,7 @@
     "location": "Gulan Street, Erbil, Iraq",
     "lat": 36.201565,
     "lng": 44.009234,
-    "image": "buffalo.jpg"
+    "image": "src/pages/erbil_content/images/AF1QipP30jVjO8EouZI1iznsalMjB07NwSqWA_BaV39A=w480-h300-k-n-rw.webp"
   },
   {
     "id": 3,
@@ -24,16 +24,16 @@
     "location": "Gulan Street, Erbil, Iraq",
     "lat": 36.201565,
     "lng": 44.009234,
-    "image": "moka.jpg"
+    "image": "src/pages/erbil_content/images/chefs-salad.jpg"
   },
   {
     "id": 4,
-    "name": "Kurdish Restaurant",
+    "name": "Abu Shahab",
     "cuisine": "Kurdish, Middle Eastern",
-    "location": "Erbil Citadel, Erbil, Iraq",
+    "location": "60 Metres Road In front Gullan tower, Erbil 44001 Iraq",
     "lat": 36.190889,
     "lng": 44.007663,
-    "image": "kurdish.jpg"
+    "image": "src/pages/erbil_content/images/abu-shahab-city.jpg"
   },
   {
     "id": 5,
@@ -42,24 +42,16 @@
     "location": "Gulan Street, Erbil, Iraq",
     "lat": 36.201565,
     "lng": 44.009234,
-    "image": "sushi.jpg"
+    "image": "src/pages/erbil_content/images/20210227-210307-largejpg.jpg"
   },
+
   {
     "id": 6,
-    "name": "Tandoor House",
-    "cuisine": "Indian, Asian",
-    "location": "Gulan Street, Erbil, Iraq",
+    "name": "The Courtyard Restaurant",
+    "cuisine": "Arabic",
+    "location": "Golan Street Infront Of Zakaria Apartments, Erbil 44001 Iraq",
     "lat": 36.201565,
     "lng": 44.009234,
-    "image": "tandoor.jpg"
-  },
-  {
-    "id": 7,
-    "name": "Zaitoon Restaurant",
-    "cuisine": "Middle Eastern, Grill",
-    "location": "Gulan Street, Erbil, Iraq",
-    "lat": 36.201565,
-    "lng": 44.009234,
-    "image": "zaitoon.jpg"
+    "image": "src/pages/erbil_content/images/caption.jpg"
   }
 ]
