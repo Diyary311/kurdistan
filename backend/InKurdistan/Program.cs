@@ -76,6 +76,7 @@ namespace InKurdistan
             app.MapControllers();
             app.MapGet("/api/test", () => "Backend is connected!");
 
+            app.MapGet("/api/test", () => "Backend is connected!");
             app.Run();
         }
     }
