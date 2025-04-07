@@ -8,7 +8,11 @@ function Resturants() {
       <Navbar />
       <div className="container mx-auto p-4">
         {/* Page Title */}
-        <h1 className="mb-8 mt-32 text-center text-3xl font-bold text-green-500 sm:text-4xl md:text-5xl">
+        <h1
+          data-aos="fade-up"
+          data-aos-fadeduration="1800"
+          className="mb-8 mt-32 text-center text-3xl font-bold text-green-500 sm:text-4xl md:text-5xl"
+        >
           Restaurants in Erbil
         </h1>
 
