@@ -89,7 +89,7 @@ const Navbar = () => {
             </>
           )}
           <li>
-            <button className="ml-4 rounded-full bg-blue-700 px-3 py-1.5 text-sm hover:bg-transparent sm:ml-6 sm:px-4 sm:py-2 sm:text-base">
+            <button className="ml-6 rounded-full bg-blue-700 px-4 py-2 text-white transition-all duration-300 hover:border-blue-50 hover:bg-transparent sm:rounded-full">
               Login/sign
             </button>
           </li>
