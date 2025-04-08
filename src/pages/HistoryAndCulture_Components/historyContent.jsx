@@ -17,15 +17,15 @@ function HistoryContent() {
 
         <div className="space-y-12">
           {/* Timeline Item 1 */}
-          <div className="flex items-center gap-12">
-            <div className="w-1/2">
+          <div className="flex flex-col items-center gap-12 md:flex-row">
+            <div className="w-full md:w-1/2">
               <img
                 src="src/pages/HistoryAndCulture_Components/image/photo_2025-04-08_03-18-28.jpg"
                 alt="Ancient Kurdish artifacts"
                 className="h-72 w-full transform rounded-lg object-cover shadow-xl transition duration-300 ease-in-out hover:scale-105"
               />
             </div>
-            <div className="w-1/2 rounded-lg bg-white p-8 shadow-md">
+            <div className="w-full rounded-lg bg-white p-8 shadow-md md:w-1/2">
               <div className="mb-4 font-bold text-blue-500">3000 BCE</div>
               <h3 className="text-2xl font-semibold text-stone-950">
                 Early Civilizations
@@ -38,15 +38,15 @@ function HistoryContent() {
           </div>
 
           {/* Timeline Item 2 */}
-          <div className="flex flex-row-reverse items-center gap-12">
-            <div className="w-1/2">
+          <div className="flex flex-col-reverse items-center gap-12 md:flex-row-reverse">
+            <div className="w-full md:w-1/2">
               <img
                 src="src/pages/HistoryAndCulture_Components/image/0000.jpg"
                 alt="Medieval Kurdish castle"
                 className="h-72 w-full transform rounded-lg object-cover shadow-xl transition duration-300 ease-in-out hover:scale-105"
               />
             </div>
-            <div className="w-1/2 rounded-lg bg-gray-800 p-8 shadow-md">
+            <div className="w-full rounded-lg bg-gray-800 p-8 shadow-md md:w-1/2">
               <div className="mb-4 font-bold text-blue-500">12th Century</div>
               <h3 className="text-2xl font-semibold">Medieval Kingdoms</h3>
               <p className="mt-4">
