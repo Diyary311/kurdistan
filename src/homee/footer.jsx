@@ -6,72 +6,80 @@ import {
   FaYoutube,
   FaTiktok,
 } from 'react-icons/fa';
+
 function Footer() {
   return (
-    <div className="bg-red-950 py-10">
-      <footer className="container mx-auto grid grid-cols-1 gap-6 md:grid-cols-3">
-        {/* about section */}
-        <div className="ml-4 text-white">
-          <h1 className="text-lg font-bold font-semibold">About InKurdistan</h1>
-          <p className="mb-2 text-sm">
-            You can discover Beauty in every corner of the .
+    <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black py-16">
+      <footer className="container mx-auto grid grid-cols-1 gap-8 text-white md:grid-cols-3">
+        {/* About Section */}
+        <div className="px-4 text-center md:text-left">
+          <h1 className="text-3xl font-extrabold text-white">
+            About InKurdistan
+          </h1>
+          <p className="mt-2 text-lg text-gray-400">
+            Discover the beauty and rich culture of Kurdistan, from its ancient
+            history to its vibrant traditions.
           </p>
         </div>
-        {/* link section */}
-        <div className="text-lg font-bold">
-          <h1 className="font-serif text-lg text-white">
-            Follow us on social media
-          </h1>
-          <div className="mt-2 flex space-x-3">
+
+        {/* Social Media Section */}
+        <div className="text-center">
+          <h1 className="text-xl font-semibold">Follow us on social media</h1>
+          <div className="mt-4 flex justify-center space-x-6">
             <a
               href="#Facebook"
-              className="font-bold text-white duration-500 hover:-translate-y-4 hover:bg-transparent hover:transition-all"
+              className="transform text-white transition-transform hover:scale-125 hover:text-blue-600"
             >
-              <FaFacebook size={24} />
+              <FaFacebook size={32} />
             </a>
-
             <a
               href="#Instagram"
-              className="font-bold text-white duration-500 hover:-translate-y-4 hover:bg-transparent hover:transition-all"
+              className="transform text-white transition-transform hover:scale-125 hover:text-pink-500"
             >
-              <FaInstagram size={24} />
+              <FaInstagram size={32} />
             </a>
-
             <a
               href="#Twitter"
-              className="font-bold text-white duration-500 hover:-translate-y-4 hover:bg-transparent hover:transition-all"
+              className="transform text-white transition-transform hover:scale-125 hover:text-blue-400"
             >
-              <FaTwitter size={24} />
+              <FaTwitter size={32} />
             </a>
-
             <a
               href="#Youtube"
-              className="font-bold text-white duration-500 hover:-translate-y-4 hover:bg-transparent hover:transition-all"
+              className="transform text-white transition-transform hover:scale-125 hover:text-red-600"
             >
-              <FaYoutube size={24} />
+              <FaYoutube size={32} />
             </a>
             <a
               href="#TikTok"
-              className="font-bold text-white duration-500 hover:-translate-y-4 hover:bg-transparent hover:transition-all"
+              className="transform text-white transition-transform hover:scale-125 hover:text-black"
             >
-              <FaTiktok size={24} />
+              <FaTiktok size={32} />
             </a>
           </div>
         </div>
-        {/* contact section */}
 
-        <div className="font-bold text-white">
-          <h1 className="text-lg font-bold">Contact Us</h1>
-          <h2 className="mt-2 text-sm">Email: contact@inkurdistan.com</h2>
-          <h2>Phone: +964 750 108 68 54</h2>
-          <p>Adress: Sulaimani,Kurdistan,iraq</p>
-        </div>
-
-        {/* copyright  section */}
-        <div className="border-wid border-width-700 ml-56 mt-6 border-t border-gray-700 pt-4 text-center text-sm">
-          © 2025 InKurdistan. All rights reserved.
+        {/* Contact Section */}
+        <div className="px-4 text-center md:text-left">
+          <h1 className="text-xl font-semibold">Contact Us</h1>
+          <p className="mt-2 text-lg">
+            Email:{' '}
+            <span className="text-gray-400">contact@inkurdistan.com</span>
+          </p>
+          <p className="mt-1 text-lg">
+            Phone: <span className="text-gray-400">+964 750 108 68 54</span>
+          </p>
+          <p className="mt-1 text-lg">
+            Address:{' '}
+            <span className="text-gray-400">Sulaimani, Kurdistan, Iraq</span>
+          </p>
         </div>
       </footer>
+
+      {/* Copyright Section */}
+      <div className="mt-8 border-t border-gray-700 pt-6 text-center text-sm text-gray-400">
+        <p>© 2025 InKurdistan. All rights reserved.</p>
+      </div>
     </div>
   );
 }
