@@ -4,20 +4,20 @@ import HotelCard from './HotelCard';
 
 function Hotel() {
   return (
-    <div className="flex min-h-screen items-start p-5">
-      <h1
-        data-aos="fade-up"
-        data-aos-fadeduration="1800"
-        className="absolute left-1/2 top-0 mt-24 -translate-x-1/2 transform text-center text-5xl font-bold font-semibold text-green-500"
-      >
+    <div className="min-h-screen p-5 md:p-10 lg:p-20">
+      <h1 className="text-center text-4xl font-bold font-semibold text-green-500">
         Hoteles in Erbil
       </h1>
 
       <Navbar />
 
       {/*card section */}
-
-      <section className="HotelCard">
+      <section
+        className="mt-6 grid grid-cols-1 gap-5"
+        data-aos="fade-up"
+        data-aos-duration="1600"
+        data-aos-easing="ease-in-out"
+      >
         <HotelCard />
       </section>
     </div>

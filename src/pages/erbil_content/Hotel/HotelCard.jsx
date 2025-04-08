@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import hotelsData from './hotels.json';
 
 // Hotel Card Component
 const HotelCard = ({ hotel }) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const toggleFavorite = () => {
+    setIsFavorite((prev) => !prev);
+  };
+
   return (
-    <div className="rounded-lg border p-4 shadow-md transition hover:shadow-lg">
+    <div className="relative rounded-lg border p-4 shadow-md transition hover:shadow-lg">
       <img
         src={hotel.image}
         alt={hotel.name}
@@ -15,9 +21,7 @@ const HotelCard = ({ hotel }) => {
       <p className="text-gray-600">
         {hotel.cuisine} • {hotel.price}
       </p>
-      <p>
-        ⭐ {hotel.rating} ({hotel.reviews} reviews)
-      </p>
+
       <p>📍 {hotel.location}</p>
       <a
         href={`https://www.google.com/maps?q=${hotel.lat},${hotel.lng}`}
@@ -27,6 +31,15 @@ const HotelCard = ({ hotel }) => {
       >
         View on Google Maps
       </a>
+
+      <button
+        onClick={toggleFavorite}
+        className={`ml-6 mt-4 inline-block rounded-full px-4 py-1 text-sm font-medium transition ${
+          isFavorite ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-800'
+        }`}
+      >
+        {isFavorite ? '★ Favorited' : '☆ Add to Favorites'}
+      </button>
     </div>
   );
 };
@@ -34,9 +47,8 @@ const HotelCard = ({ hotel }) => {
 // Hotels Section to display all hotel cards
 const HotelCards = () => {
   return (
-    <div className="p-6">
-      <h1 className="mb-4 text-3xl font-bold">Recommended Hotels</h1>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+    <div className="mt-40 items-center justify-center p-6">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6">
         {hotelsData.map((hotel, index) => (
           <HotelCard key={index} hotel={hotel} />
         ))}
@@ -60,4 +72,4 @@ HotelCard.propTypes = {
   }).isRequired,
 };
 
-export default HotelCard;
+export default HotelCards;

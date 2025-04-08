@@ -20,12 +20,11 @@ function Buttons() {
           Hotels
         </button>
 
-        <button className="cursor-pointer border-white bg-green-500 transition-all duration-700 hover:-translate-y-5 hover:bg-transparent hover:font-semibold hover:tracking-widest hover:text-green-500">
+        <button
+          onClick={() => navigate('/subcity')}
+          className="cursor-pointer border-white bg-green-500 transition-all duration-700 hover:-translate-y-5 hover:bg-transparent hover:font-semibold hover:tracking-widest hover:text-green-500"
+        >
           Subcitys
-        </button>
-
-        <button className="cursor-pointer border-white bg-green-500 transition-all duration-700 hover:-translate-y-5 hover:bg-transparent hover:font-semibold hover:tracking-widest hover:text-green-500">
-          Attraction Places
         </button>
       </div>
     </div>
