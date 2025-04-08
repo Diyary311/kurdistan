@@ -1,6 +1,7 @@
 ﻿using InKurdistan.Data;
 using InKurdistan.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using BCrypt.Net;
 
 namespace InKurdistan.Controllers
@@ -17,14 +18,31 @@ namespace InKurdistan.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Username == request.Username);
+            // Find user by username
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == request.Username);
 
+            // Validate credentials
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-                return Unauthorized("Invalid credentials");
+            {
+                return Unauthorized(new { message = "Invalid credentials!" });
+            }
 
-            return Ok(new { user.Username, user.Role });
+            // Check admin role
+            if (!user.Role.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                return StatusCode(403, new { message = "Access denied: Only admins can log in!" });
+            }
+
+            // Successful admin login
+            return Ok(new
+            {
+                message = "Login successful!",
+                user.Username,
+                user.Role
+            });
         }
     }
 
