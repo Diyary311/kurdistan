@@ -1,7 +1,7 @@
-using InKurdistan.Data;
+﻿using InKurdistan.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Diagnostics; // Add this
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace InKurdistan
 {
@@ -19,15 +19,18 @@ namespace InKurdistan
             {
                 options.AddPolicy("ReactFrontend", policy =>
                 {
-                    policy.WithOrigins("http://localhost:5173", "http://localhost:5174")
-                          .AllowAnyHeader()
-                          .AllowAnyMethod();
+                    policy.WithOrigins(
+                        "http://localhost:5173",  // React/Vite default
+                        "http://localhost:5000" 
+                    )
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
                 });
             });
 
             // Add Authentication (Required for Authorization)
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme) // Simple scheme for now
-                .AddJwtBearer(options => { }); // Empty config for testing
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options => { }); // Empty config for now
 
             // Database configuration
             builder.Services.AddDbContext<AppDbContext>(options =>
@@ -35,6 +38,9 @@ namespace InKurdistan
                     builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
+            app.Urls.Clear();
+            app.Urls.Add("http://localhost:5000");
+            
 
             // Seed database
             using (var scope = app.Services.CreateScope())
@@ -53,17 +59,19 @@ namespace InKurdistan
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
 
-            // Middleware order is critical
+            // ✅ Apply the named CORS policy
             app.UseCors("ReactFrontend");
-            app.UseAuthentication(); // Now properly configured
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseExceptionHandler(errorApp => {
-                errorApp.Run(async context => {
+            app.UseExceptionHandler(errorApp =>
+            {
+                errorApp.Run(async context =>
+                {
                     context.Response.ContentType = "application/json";
                     var error = context.Features.Get<IExceptionHandlerFeature>();
                     await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(new
@@ -76,7 +84,6 @@ namespace InKurdistan
             app.MapControllers();
             app.MapGet("/api/test", () => "Backend is connected!");
 
-            app.MapGet("/api/test", () => "Backend is connected!");
             app.Run();
         }
     }

@@ -1,31 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attraction Management</title>
+    <script>
+        const API_BASE = 'http://localhost:5000';
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('attractionForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const formData = new FormData();
+                formData.append('Name', document.getElementById('attractionName').value);
+                formData.append('Description', document.getElementById('description').value);
+                formData.append('Image', document.getElementById('attractionImage').files[0]);
+
+                try {
+                    const response = await fetch(`${API_BASE}/api/Attractions`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) throw new Error('Server error');
+
+                    const newAttraction = await response.json();
+                    addAttractionCard(newAttraction);
+                    document.getElementById('attractionForm').reset();
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error saving attraction');
+                }
+            });
+
+            document.querySelector('.attraction-grid').addEventListener('click', async (e) => {
+                if (e.target.classList.contains('delete-btn')) {
+                    const card = e.target.closest('.attraction-card');
+                    const id = card.dataset.id;
+
+                    try {
+                        const response = await fetch(`${API_BASE}/api/Attractions/${id}`, {
+                            method: 'DELETE'
+                        });
+
+                        if (!response.ok) throw new Error('Delete failed');
+                        card.remove();
+                    } catch (error) {
+                        console.error('Delete error:', error);
+                        alert('Error deleting attraction: ' + error.message);
+                    }
+                }
+
+                if (e.target.classList.contains('edit-btn')) {
+                    const card = e.target.closest('.attraction-card');
+                    const id = card.dataset.id;
+
+                    const response = await fetch(`${API_BASE}/api/Attractions/${id}`);
+                    const attraction = await response.json();
+
+                    document.getElementById('editAttractionName').value = attraction.name;
+                    document.getElementById('editDescription').value = attraction.description;
+                    document.getElementById('editAttractionId').value = attraction.id;
+
+                    document.getElementById('editAttractionFormPopup').style.display = 'flex';
+                }
+            });
+
+            document.getElementById('cancelEdit').addEventListener('click', () => {
+                document.getElementById('editAttractionFormPopup').style.display = 'none';
+            });
+
+            document.getElementById('submitEdit').addEventListener('click', async (e) => {
+                e.preventDefault();
+
+                const formData = new FormData();
+                formData.append('Name', document.getElementById('editAttractionName').value);
+                formData.append('Description', document.getElementById('editDescription').value);
+                formData.append('Image', document.getElementById('editAttractionImage').files[0]);
+                formData.append('id', document.getElementById('editAttractionId').value);
+
+                try {
+                    const response = await fetch(`${API_BASE}/api/Attractions/${document.getElementById('editAttractionId').value}`, {
+                        method: 'PUT',
+                        body: formData
+                    });
+
+                    if (!response.ok) throw new Error('Server error');
+
+                    const updatedAttraction = await response.json();
+                    updateAttractionCard(updatedAttraction);
+
+                    document.getElementById('editAttractionFormPopup').style.display = 'none';
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error updating attraction');
+                }
+            });
+
+            function updateAttractionCard(attraction) {
+                const card = document.querySelector(`.attraction-card[data-id="${attraction.id}"]`);
+                card.querySelector('h3').innerText = attraction.name;
+                card.querySelector('p').innerText = attraction.description;
+                card.querySelector('img').src = `${API_BASE}${attraction.imagePath}`;
+            }
+
+            function addAttractionCard(attraction) {
+                const grid = document.querySelector('.attraction-grid');
+                const card = document.createElement('div');
+                card.className = 'attraction-card';
+                card.dataset.id = attraction.id;
+                card.innerHTML = `
+    <img src="${API_BASE}${attraction.imagePath}" alt="${attraction.name}">
+    <h3>${attraction.name}</h3>
+    <p>${attraction.description}</p>
+    <div class="action-buttons">
+        <button class="edit-btn">Edit</button>
+        <button class="delete-btn">Delete</button>
+    </div>
+`;
+                grid.appendChild(card);
+            }
+
+            (async () => {
+                try {
+                    const response = await fetch(`${API_BASE}/api/Attractions`);
+                    if (!response.ok) throw new Error('Failed to load attractions');
+
+                    const attractions = await response.json();
+                    attractions.forEach(addAttractionCard);
+                } catch (error) {
+                    console.error('Loading error:', error);
+                    alert('Error loading attractions: ' + error.message);
+                }
+            })();
+        });
+    </script>
+
     <style>
-        /* Shared Admin Styles */
+        /* Navigation Styles */
         .admin-nav {
             background-color: #2c3e50;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .nav-links {
-    display: flex;
-    gap: 15px;
-}
+            display: flex;
+            gap: 15px;
+        }
 
-        
         .admin-nav a {
             color: white;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 8px 16px;
-    border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 4px;
         }
 
         .admin-nav a:hover {
@@ -40,16 +171,20 @@
         }
 
         .home-link {
-    background-color: #f39c12; /* orange-ish color */
-    color: black;
-}
+            background-color: #f39c12;
+            color: black;
+        }
 
-        /* Unified Form Styles */
-        .management-form {
+        .admin-nav a[href="attraction-admin.html"] {
+            background: #4CAF50;
+        }
+
+        /* Form Styles */
+        .attraction-form {
             background: white;
             padding: 2rem;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 2rem;
         }
 
@@ -71,21 +206,22 @@
             border-radius: 4px;
         }
 
-        /* Unified Grid Styles */
-        .content-grid {
+        /* Grid Layout */
+        .attraction-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2rem;
+            margin-top: 2rem;
         }
 
-        .content-card {
+        .attraction-card {
             background: white;
             padding: 1rem;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .content-card img {
+        .attraction-card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
@@ -93,7 +229,6 @@
             margin-bottom: 1rem;
         }
 
-        /* Unified Button Styles */
         button {
             padding: 0.5rem 1rem;
             font-size: 1em;
@@ -110,11 +245,60 @@
             transform: translateY(-2px);
         }
 
-        .admin-nav a[href="attraction-admin.html"] {
-    background: #4CAF50;
-}
+        /* Styles for the popout form */
+        #editAttractionFormPopup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 400px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            font-size: 1em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #4CAF50;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
+
 <body>
     <nav class="admin-nav">
         <a href="http://localhost:5173" class="home-link">Home</a>
@@ -127,36 +311,56 @@
 
     <div class="admin-container">
         <h1>Attraction Management</h1>
-        
-        <!-- Add Attraction Form -->
-        <div class="management-form">
+
+        <form id="attractionForm" class="attraction-form">
             <h2>Add New Attraction</h2>
-            <form id="attractionForm">
-                <div class="form-group">
-                    <label>Attraction Name:</label>
-                    <input type="text" id="attractionName" required>
-                </div>
-                <div class="form-group">
-                    <label>Upload Image:</label>
-                    <input type="file" id="attractionImage" accept="image/*" required>
-                </div>
-                <button type="submit">Add Attraction</button>
-            </form>
+            <div class="form-group">
+                <label for="attractionName">Attraction Name</label>
+                <input type="text" id="attractionName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="attractionImage">Image</label>
+                <input type="file" id="attractionImage" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" id="description" required>
+            </div>
+
+            <button type="submit">Add Attraction</button>
+        </form>
+
+        <div class="attraction-grid">
+            <!-- Attraction cards will be added here -->
         </div>
 
-        <!-- Attractions Grid -->
-        <div class="content-grid">
-            <!-- Example Card -->
-            <div class="content-card">
-                <img src="placeholder.jpg" alt="Attraction Image">
-                <h3>Historic Castle</h3>
-                <p>Ancient fortress with panoramic views</p>
-                <div class="action-buttons">
-                    <button>Edit</button>
-                    <button>Delete</button>
+        <!-- Popout Edit Form -->
+        <div id="editAttractionFormPopup" style="display: none;">
+            <div class="form-container">
+                <h2>Edit Attraction</h2>
+                <div class="form-group">
+                    <label for="editAttractionName">Attraction Name</label>
+                    <input type="text" id="editAttractionName" required>
                 </div>
+
+                <div class="form-group">
+                    <label for="editAttractionImage">Image</label>
+                    <input type="file" id="editAttractionImage">
+                </div>
+
+                <div class="form-group">
+                    <label for="editDescription">Description</label>
+                    <input type="text" id="editDescription" required>
+                </div>
+
+                <input type="hidden" id="editAttractionId">
+                <button id="submitEdit">Submit Edit</button>
+                <button id="cancelEdit">Cancel</button>
             </div>
         </div>
     </div>
 </body>
+
 </html>

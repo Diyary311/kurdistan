@@ -7,62 +7,152 @@
     <title>Subcity Management</title>
     <!-- Add this script section before </body> -->
     <script>
-        document.getElementById('subcityForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        const API_BASE = 'http://localhost:5000';
+        document.addEventListener('DOMContentLoaded', () => {
+            // Form submission handler for adding a new subcity
+            document.getElementById('subcityForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
 
-            const formData = new FormData();
-            formData.append('name', document.getElementById('subcityName').value);
-            formData.append('image', document.getElementById('subcityImage').files[0]);
+                const formData = new FormData();
+                formData.append('cityName', document.getElementById('cityName').value);
+                formData.append('image', document.getElementById('subcityImage').files[0]);
+                formData.append('description', document.getElementById('description').value);
 
-            try {
-                const response = await fetch('/api/SubCities', {
-                    method: 'POST',
-                    body: formData
-                });
+                try {
+                    const response = await fetch(`${API_BASE}/api/SubCities`, {
+                        method: 'POST',
+                        body: formData
+                    });
 
-                if (!response.ok) throw new Error('Server error');
+                    if (!response.ok) throw new Error('Server error');
 
-                const newSubCity = await response.json();
-                addSubCityCard(newSubCity);
-                document.getElementById('subcityForm').reset();
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error saving subcity');
+                    const newSubCity = await response.json();
+                    addSubCityCard(newSubCity);
+                    document.getElementById('subcityForm').reset();
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error saving subcity');
+                }
+            });
+
+            // Delete and Edit handlers
+            document.querySelector('.subcity-grid').addEventListener('click', async (e) => {
+                if (e.target.classList.contains('delete-btn')) {
+                    const card = e.target.closest('.subcity-card');
+                    const id = card.dataset.id;
+
+                    try {
+                        const response = await fetch(`${API_BASE}/api/SubCities/${id}`, {
+                            method: 'DELETE'
+                        });
+
+                        if (!response.ok) throw new Error('Delete failed');
+                        card.remove();
+                    } catch (error) {
+                        console.error('Delete error:', error);
+                        alert('Error deleting subcity: ' + error.message);
+                    }
+                }
+
+                if (e.target.classList.contains('edit-btn')) {
+                    const card = e.target.closest('.subcity-card');
+                    const id = card.dataset.id;
+
+                    // Fetch subcity data for editing
+                    const response = await fetch(`${API_BASE}/api/SubCities/${id}`);
+                    const subCity = await response.json();
+
+                    // Pre-fill the form with current data
+                    document.getElementById('editCityName').value = subCity.cityName;
+                    document.getElementById('editDescription').value = subCity.description;
+                    document.getElementById('editSubcityImage').value = '';  // You can't pre-fill file inputs
+                    document.getElementById('editSubcityId').value = subCity.id;
+
+                    // Show the edit form popout
+                    document.getElementById('editSubCityFormPopup').style.display = 'flex';
+                }
+            });
+
+            // Cancel button handler for closing the form
+            document.getElementById('cancelEdit').addEventListener('click', () => {
+                document.getElementById('editSubCityFormPopup').style.display = 'none';
+            });
+
+            // Submit edited subcity
+            document.getElementById('submitEdit').addEventListener('click', async (e) => {
+                e.preventDefault();
+
+                const formData = new FormData();
+                formData.append('cityName', document.getElementById('editCityName').value);
+                formData.append('description', document.getElementById('editDescription').value);
+                formData.append('image', document.getElementById('editSubcityImage').files[0]);
+                formData.append('id', document.getElementById('editSubcityId').value);
+
+                try {
+                    const response = await fetch(`${API_BASE}/api/SubCities/${document.getElementById('editSubcityId').value}`, {
+                        method: 'PUT',
+                        body: formData
+                    });
+
+                    if (!response.ok) throw new Error('Server error');
+
+                    const updatedSubCity = await response.json();
+
+                    // Update the card with new data
+                    updateSubCityCard(updatedSubCity);
+
+                    // Hide the popout form
+                    document.getElementById('editSubCityFormPopup').style.display = 'none';
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error updating subcity');
+                }
+            });
+
+            // Update subcity card after editing
+            function updateSubCityCard(subCity) {
+                const card = document.querySelector(`.subcity-card[data-id="${subCity.id}"]`);
+                card.querySelector('h3').innerText = subCity.cityName;
+                card.querySelector('p').innerText = subCity.description;
+                card.querySelector('img').src = `${API_BASE}${subCity.imageUrl}`;
             }
-        });
 
-        function addSubCityCard(subCity) {
-            const grid = document.querySelector('.subcity-grid');
-
-            const card = document.createElement('div');
-            card.className = 'subcity-card';
-            card.innerHTML = `
-            <img src="${subCity.imageUrl}" alt="${subCity.name}">
-            <h3>${subCity.name}</h3>
-            <div class="action-buttons">
-                <button>Edit</button>
-                <button>Delete</button>
-            </div>
-        `;
-
-            grid.appendChild(card);
-        }
-
-        // Load existing subcities on page load
-        window.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const response = await fetch('/api/SubCities');
-                const subCities = await response.json();
-                subCities.forEach(addSubCityCard);
-            } catch (error) {
-                console.error('Error loading subcities:', error);
+            // Card creation function
+            function addSubCityCard(subCity) {
+                const grid = document.querySelector('.subcity-grid');
+                const card = document.createElement('div');
+                card.className = 'subcity-card';
+                card.dataset.id = subCity.id;
+                card.innerHTML = `
+                    <img src="${API_BASE}${subCity.imageUrl}" alt="${subCity.cityName}">
+                    <h3>${subCity.cityName}</h3>
+                    <p>${subCity.description}</p>
+                    <div class="action-buttons">
+                        <button class="edit-btn">Edit</button>
+                        <button class="delete-btn">Delete</button>
+                    </div>
+                `;
+                grid.appendChild(card);
             }
+
+            // Initial load of subcities
+            (async () => {
+                try {
+                    const response = await fetch(`${API_BASE}/api/SubCities`);
+                    if (!response.ok) throw new Error('Failed to load subcities');
+
+                    const subCities = await response.json();
+                    subCities.forEach(addSubCityCard);
+                } catch (error) {
+                    console.error('Loading error:', error);
+                    alert('Error loading subcities: ' + error.message);
+                }
+            })();
         });
     </script>
 
     <style>
         /* Navigation Styles */
-
         .admin-nav {
             background-color: #2c3e50;
             padding: 10px 20px;
@@ -75,7 +165,6 @@
             display: flex;
             gap: 15px;
         }
-
 
         .admin-nav a {
             color: white;
@@ -98,7 +187,6 @@
 
         .home-link {
             background-color: #f39c12;
-            /* orange-ish color */
             color: black;
         }
 
@@ -107,12 +195,6 @@
         }
 
         /* Form Styles */
-        .admin-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
         .subcity-form {
             background: white;
             padding: 2rem;
@@ -141,12 +223,10 @@
 
         /* Grid Layout */
         .subcity-grid {
-            .subcity-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                gap: 2rem;
-                margin-top: 2rem;
-            }
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
         .subcity-card {
@@ -162,6 +242,58 @@
             object-fit: cover;
             border-radius: 4px;
             margin-bottom: 1rem;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            font-size: 1em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #4CAF50;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Styles for the popout form */
+        #editSubCityFormPopup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 400px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
 
         button {
@@ -195,36 +327,52 @@
     <div class="admin-container">
         <h1>Subcity Management</h1>
 
-        <!-- Add Subcity Form -->
-        <div class="subcity-form">
+        <form id="subcityForm" class="subcity-form">
             <h2>Add New Subcity</h2>
-            <form id="subcityForm">
-                <div class="form-group">
-                    <label>Subcity Name:</label>
-                    <input type="text" id="subcityName" required>
-                </div>
-                <div class="form-group">
-                    <label>Upload Image:</label>
-                    <input type="file" id="subcityImage" accept="image/*" required>
-                </div>
-                <button type="submit"
-                    style="background: #4CAF50; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer;">
-                    Add Subcity
-                </button>
-            </form>
+            <div class="form-group">
+                <label for="cityName">City Name</label>
+                <input type="text" id="cityName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="subcityImage">Image</label>
+                <input type="file" id="subcityImage" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" id="description" required>
+            </div>
+
+            <button type="submit">Add Subcity</button>
+        </form>
+
+        <div class="subcity-grid">
+            <!-- Subcity cards will be added here -->
         </div>
 
-        <!-- Subcity List -->
-        <div class="subcity-grid">
-            <!-- Example Card -->
-            <div class="subcity-card">
-                <img src="placeholder.jpg" alt="Subcity Image">
-                <h3>Sample Subcity</h3>
-                <p>Description will go here</p>
-                <div class="action-buttons">
-                    <button>Edit</button>
-                    <button>Delete</button>
+        <!-- Popout Edit Form -->
+        <div id="editSubCityFormPopup" style="display: none;">
+            <div class="form-container">
+                <h2>Edit Subcity</h2>
+                <div class="form-group">
+                    <label for="editCityName">City Name</label>
+                    <input type="text" id="editCityName" required>
                 </div>
+
+                <div class="form-group">
+                    <label for="editSubcityImage">Image</label>
+                    <input type="file" id="editSubcityImage">
+                </div>
+
+                <div class="form-group">
+                    <label for="editDescription">Description</label>
+                    <input type="text" id="editDescription" required>
+                </div>
+
+                <input type="hidden" id="editSubcityId">
+                <button id="submitEdit">Submit Edit</button>
+                <button id="cancelEdit">Cancel</button>
             </div>
         </div>
     </div>
