@@ -1,6 +1,5 @@
 ﻿using InKurdistan.Data;
 using InKurdistan.Models;
-using InKurdistan.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,39 +18,138 @@ namespace InKurdistan.Controllers
             _env = env;
         }
 
+        // Create new subcity
         [HttpPost]
-        public async Task<IActionResult> CreateSubCity([FromForm] string name, [FromForm] IFormFile image)
+        public async Task<IActionResult> CreateSubCity([FromForm] SubCityUpdateDto dto)
         {
-            if (image == null || image.Length == 0)
-                return BadRequest("No image uploaded");
-
-            // Save image
-            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
-            var filePath = Path.Combine(_env.WebRootPath, "uploads", fileName);
-
-            Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            if (string.IsNullOrWhiteSpace(dto.CityName) || dto.Image == null)
             {
-                await image.CopyToAsync(stream);
+                return BadRequest("City name and image are required.");
             }
 
+            // Save the uploaded image
+            string uploadsFolder = Path.Combine(_env.WebRootPath, "images/subcities");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(dto.Image.FileName);
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await dto.Image.CopyToAsync(stream);
+            }
+
+            // Save subcity to the database
             var subCity = new SubCity
             {
-                Name = name,
-                ImageUrl = $"/uploads/{fileName}"
+                CityName = dto.CityName,
+                ImageUrl = $"/images/subcities/{uniqueFileName}",
+                Description = dto.Description  // Save the description as well
             };
 
             _context.SubCities.Add(subCity);
             await _context.SaveChangesAsync();
 
+            return CreatedAtAction(nameof(GetSubCities), new { id = subCity.Id }, subCity);
+        }
+
+        // Get all subcities
+        [HttpGet]
+        public async Task<IActionResult> GetSubCities()
+        {
+            var subCities = await _context.SubCities.ToListAsync();
+            return Ok(subCities);
+        }
+
+        // Get a single subcity by ID
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSubCityById(int id)
+        {
+            var subCity = await _context.SubCities.FindAsync(id);
+            if (subCity == null) return NotFound();
+
             return Ok(subCity);
         }
 
-        [HttpGet]
-        public IActionResult GetSubCities()
+        // Update subcity by ID
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateSubCity(int id, [FromForm] SubCityUpdateDto dto)
         {
-            var subCities = _context.SubCities.ToList();
-            return Ok(subCities);
+            var subCity = await _context.SubCities.FindAsync(id);
+            if (subCity == null) return NotFound();
+
+            // Update city name and description
+            subCity.CityName = dto.CityName;
+            subCity.Description = dto.Description;
+
+            // Handle image update (if a new image is provided)
+            if (dto.Image != null)
+            {
+                // Delete the old image
+                if (!string.IsNullOrEmpty(subCity.ImageUrl))
+                {
+                    var oldFilePath = Path.Combine(_env.WebRootPath, subCity.ImageUrl.TrimStart('/'));
+                    if (System.IO.File.Exists(oldFilePath))
+                    {
+                        System.IO.File.Delete(oldFilePath);
+                    }
+                }
+
+                // Save the new image
+                string uploadsFolder = Path.Combine(_env.WebRootPath, "images/subcities");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(dto.Image.FileName);
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await dto.Image.CopyToAsync(stream);
+                }
+
+                subCity.ImageUrl = $"/images/subcities/{uniqueFileName}";
+            }
+
+            _context.SubCities.Update(subCity);
+            await _context.SaveChangesAsync();
+
+            return Ok(subCity);
         }
+
+        // Delete subcity by ID
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSubCity(int id)
+        {
+            var subCity = await _context.SubCities.FindAsync(id);
+            if (subCity == null) return NotFound();
+
+            // Delete image file
+            if (!string.IsNullOrEmpty(subCity.ImageUrl))
+            {
+                var filePath = Path.Combine(_env.WebRootPath, subCity.ImageUrl.TrimStart('/'));
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+
+            _context.SubCities.Remove(subCity);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+    }
+
+    // DTO for updating subcity
+    public class SubCityUpdateDto
+    {
+        public string CityName { get; set; }
+        public IFormFile Image { get; set; }
+        public string Description { get; set; }
     }
 }
