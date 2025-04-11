@@ -8,7 +8,7 @@ function Subcity() {
   useEffect(() => {
     const fetchSubcities = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/SubCities');
+        const response = await fetch('http://localhost:5000/api/SubCities?cityIds=1');
         const data = await response.json();
         setSubcities(data);
       } catch (error) {

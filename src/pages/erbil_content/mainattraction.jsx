@@ -7,7 +7,7 @@ const MainAttractions = () => {
   useEffect(() => {
     const fetchAttractions = async () => {
       try {
-        const response = await fetch(`${API_BASE}/api/Attractions`);
+        const response = await fetch(`${API_BASE}/api/Attractions?cityIds=1`);
         if (!response.ok) throw new Error('Failed to fetch attractions');
         const data = await response.json();
         setAttractions(data);

@@ -47,7 +47,8 @@ namespace InKurdistan.Controllers
             {
                 CityName = dto.CityName,
                 ImageUrl = $"/images/subcities/{uniqueFileName}",
-                Description = dto.Description  // Save the description as well
+                Description = dto.Description,  // Save the description as well
+                CityId = dto.CityId
             };
 
             _context.SubCities.Add(subCity);
@@ -58,11 +59,20 @@ namespace InKurdistan.Controllers
 
         // Get all subcities
         [HttpGet]
-        public async Task<IActionResult> GetSubCities()
+        public async Task<IActionResult> GetSubCities([FromQuery] string? cityIds)
         {
-            var subCities = await _context.SubCities.ToListAsync();
-            return Ok(subCities);
+            var query = _context.SubCities.AsQueryable();
+
+            if (!string.IsNullOrEmpty(cityIds))
+            {
+                var ids = cityIds.Split(',').Select(int.Parse).ToList();
+                query = query.Where(s => ids.Contains(s.CityId));
+            }
+
+            var result = await query.ToListAsync();
+            return Ok(result);
         }
+
 
         // Get a single subcity by ID
         [HttpGet("{id}")]
@@ -84,6 +94,7 @@ namespace InKurdistan.Controllers
             // Update city name and description
             subCity.CityName = dto.CityName;
             subCity.Description = dto.Description;
+            subCity.CityId = dto.CityId;
 
             // Handle image update (if a new image is provided)
             if (dto.Image != null)
@@ -149,7 +160,9 @@ namespace InKurdistan.Controllers
     public class SubCityUpdateDto
     {
         public string CityName { get; set; }
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
         public string Description { get; set; }
+
+        public int CityId { get; set; }
     }
 }

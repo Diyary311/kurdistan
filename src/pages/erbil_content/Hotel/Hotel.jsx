@@ -18,7 +18,8 @@ function Hotel() {
         data-aos-duration="1600"
         data-aos-easing="ease-in-out"
       >
-        <HotelCard />
+        <HotelCard cityId={1} />
+
       </section>
     </div>
   );

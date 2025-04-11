@@ -38,7 +38,9 @@ namespace InKurdistan.Controllers
             {
                 Name = dto.Name,
                 Description = dto.Description,
-                ImagePath = $"/images/attractions/{fileName}"
+                ImagePath = $"/images/attractions/{fileName}",
+                CityId = dto.CityId
+
             };
 
             _context.Attractions.Add(attraction);
@@ -48,10 +50,25 @@ namespace InKurdistan.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAttractions()
+        public async Task<IActionResult> GetAttractions([FromQuery] string? cityIds)
         {
-            return Ok(await _context.Attractions.ToListAsync());
+            var query = _context.Attractions.AsQueryable();
+
+            if (!string.IsNullOrEmpty(cityIds))
+            {
+                var ids = cityIds
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(id => int.TryParse(id, out var cid) ? cid : (int?)null)
+                    .Where(cid => cid.HasValue)
+                    .Select(cid => cid.Value)
+                    .ToList();
+
+                query = query.Where(a => ids.Contains(a.CityId));
+            }
+
+            return Ok(await query.ToListAsync());
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAttractionById(int id)
@@ -69,6 +86,8 @@ namespace InKurdistan.Controllers
 
             attraction.Name = dto.Name;
             attraction.Description = dto.Description;
+            attraction.CityId = dto.CityId;
+
 
             if (dto.Image != null)
             {
@@ -118,6 +137,7 @@ namespace InKurdistan.Controllers
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
+        public int CityId { get; set; }
     }
 }
