@@ -17,15 +17,7 @@ namespace InKurdistan.Data
         public DbSet<City> Cities { get; set; }
         public DbSet<SubCity> SubCities { get; set; }
         public DbSet<Attraction> Attractions { get; set; }
+        public DbSet<Hotel> Hotels { get; set; }
 
-        // Optional: Model configuration
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        { // Fix decimal precision for City.Area
-            modelBuilder.Entity<City>()
-                .Property(c => c.Area)
-                .HasPrecision(18, 2);
-
-      
-        }
     }
 }

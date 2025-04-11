@@ -5,11 +5,7 @@
 namespace InKurdistan.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:backend/InKurdistan/Migrations/20250409183241_AddDescriptionToSubCity.cs
-    public partial class AddDescriptionToSubCity : Migration
-========
-    public partial class create : Migration
->>>>>>>> 45f21e02c1e8156eb687919014acb537a01e7b4f:backend/InKurdistan/Migrations/20250409130745_create.cs
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,11 +31,7 @@ namespace InKurdistan.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Population = table.Column<int>(type: "int", nullable: true),
-                    Area = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,6 +68,36 @@ namespace InKurdistan.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Hotels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HotelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StarRate = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GoogleMapUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CityId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Hotels", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Hotels_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Hotels_CityId",
+                table: "Hotels",
+                column: "CityId");
         }
 
         /// <inheritdoc />
@@ -85,13 +107,16 @@ namespace InKurdistan.Migrations
                 name: "Attractions");
 
             migrationBuilder.DropTable(
-                name: "Cities");
+                name: "Hotels");
 
             migrationBuilder.DropTable(
                 name: "SubCities");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Cities");
         }
     }
 }

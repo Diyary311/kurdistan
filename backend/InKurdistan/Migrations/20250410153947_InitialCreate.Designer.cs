@@ -11,13 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InKurdistan.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-<<<<<<<< HEAD:backend/InKurdistan/Migrations/20250409183241_AddDescriptionToSubCity.Designer.cs
-    [Migration("20250409183241_AddDescriptionToSubCity")]
-    partial class AddDescriptionToSubCity
-========
-    [Migration("20250409130745_create")]
-    partial class create
->>>>>>>> 45f21e02c1e8156eb687919014acb537a01e7b4f:backend/InKurdistan/Migrations/20250409130745_create.Designer.cs
+    [Migration("20250410153947_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,11 +57,35 @@ namespace InKurdistan.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal?>("Area")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cities");
+                });
+
+            modelBuilder.Entity("InKurdistan.Models.Hotel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GoogleMapUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HotelName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -74,16 +93,17 @@ namespace InKurdistan.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("Population")
+                    b.Property<int>("StarRate")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities");
+                    b.HasIndex("CityId");
+
+                    b.ToTable("Hotels");
                 });
 
             modelBuilder.Entity("InKurdistan.Models.SubCity", b =>
@@ -138,6 +158,22 @@ namespace InKurdistan.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("InKurdistan.Models.Hotel", b =>
+                {
+                    b.HasOne("InKurdistan.Models.City", "City")
+                        .WithMany("Hotels")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+                });
+
+            modelBuilder.Entity("InKurdistan.Models.City", b =>
+                {
+                    b.Navigation("Hotels");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Management</title>
+    <style>
+        /* Navigation Styles */
+        .admin-nav {
+            background-color: #2c3e50;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .admin-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 4px;
+        }
+
+        .admin-nav a:hover {
+            background-color: #3e4e60;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 10px;
+            padding: 0 1rem;
+        }
+
+        .home-link {
+            background-color: #f39c12;
+            color: black;
+        }
+
+        .admin-nav a[href="hotel-admin.html"] {
+            background: #4CAF50;
+        }
+
+        /* Form Styles */
+        .subcity-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Grid Layout */
+        .subcity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .subcity-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subcity-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            font-size: 1em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #4CAF50;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Styles for the popout form */
+        #editHotelPopup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    width: 500px; /* wider than before */
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.form-group {
+    margin-bottom: 0.75rem; /* tighter spacing */
+}
+
+
+     
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            font-size: 1em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #4CAF50;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .city-filters {
+            background: #2c3e50;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            height: 15px;
+            color: white;
+        }
+
+        .city-filters label {
+            display: inline-block;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 14px;
+
+        }
+
+        .city-filters input[type="checkbox"] {
+            margin-right: 5px;
+            transform: scale(0.9);
+            /* Make checkboxes smaller */
+        }
+
+        .filter-error {
+            color: red;
+            padding: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="admin-nav">
+        <a href="http://localhost:5173" class="home-link">Home</a>
+        <div class="nav-links">
+            <a href="subcity-admin.html">Subcities</a>
+            <a href="attraction-admin.html">Attractions</a>
+            <a href="hotel-admin.html">Hotels</a>
+            <a href="admin-panel.html">Users</a>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <h1>Hotel Management</h1>
+
+        <form id="hotelForm" class="subcity-form">
+            <h2>Add New Hotel</h2>
+            <div class="form-group">
+                <label for="hotelName">Hotel Name</label>
+                <input type="text" id="hotelName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="rate">Rate (1-5 Stars)</label>
+                <input type="number" id="rate" min="1" max="5" required>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="text" id="price" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mapUrl">Google Map URL</label>
+                <input type="text" id="mapUrl" required>
+            </div>
+
+            <div class="form-group">
+                <label for="hotelImage">Image</label>
+                <input type="file" id="hotelImage" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" id="description" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cityId">City</label>
+                <select id="cityId" required>
+                    <option value="">Select a City</option>
+                    <option value="1">Erbil</option>
+                    <option value="2">Sulaimani</option>
+                    <option value="3">Halabja</option>
+                    <option value="4">Duhok</option>
+                </select>
+
+            </div>
+
+            <button type="submit">Add Hotel</button>
+        </form>
+
+        <!-- City Filter Section -->
+        <div class="city-filters">
+            <h2>Filter by City</h2>
+            <label>
+                <input type="checkbox" class="city-checkbox" data-city-id="1" checked> Erbil
+            </label>
+            <label>
+                <input type="checkbox" class="city-checkbox" data-city-id="2" checked> Sulaimani
+            </label>
+            <label>
+                <input type="checkbox" class="city-checkbox" data-city-id="3" checked> Halabja
+            </label>
+            <label>
+                <input type="checkbox" class="city-checkbox" data-city-id="4" checked> Duhok
+            </label>
+        </div>
+
+        <div class="subcity-grid" id="hotelGrid"></div>
+
+        <!-- Edit Popout -->
+        <div id="editHotelPopup" style="display:none;">
+            <div class="form-container">
+                <h2>Edit Hotel</h2>
+                <div class="form-group">
+                    <label for="editHotelName">Hotel Name</label>
+                    <input type="text" id="editHotelName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editRate">Rate</label>
+                    <input type="number" id="editRate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editPrice">Price</label>
+                    <input type="text" id="editPrice" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editMapUrl">Map URL</label>
+                    <input type="text" id="editMapUrl" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editHotelImage">Image</label>
+                    <input type="file" id="editHotelImage">
+                </div>
+
+                <div class="form-group">
+                    <label for="editDescription">Description</label>
+                    <input type="text" id="editDescription" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editCityId">City</label>
+                    <select id="editCityId" required>
+                        <option value="">Select a City</option>
+                    </select>
+                </div>
+                
+
+                <input type="hidden" id="editHotelId">
+                <button id="submitHotelEdit">Submit Edit</button>
+                <button id="cancelHotelEdit">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000';
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHotels();
+            setupFormEvents();
+            setupFilterEvents();
+        });
+    
+        function setupFormEvents() {
+            document.getElementById('hotelForm').addEventListener('submit', handleAddHotel);
+            document.getElementById('submitHotelEdit').addEventListener('click', handleEditHotel);
+            document.getElementById('cancelHotelEdit').addEventListener('click', () => {
+                document.getElementById('editHotelPopup').style.display = 'none';
+            });
+            document.getElementById('hotelGrid').addEventListener('click', handleCardActions);
+        }
+    
+        async function handleAddHotel(e) {
+            e.preventDefault();
+    
+            const formData = new FormData();
+            formData.append('HotelName', document.getElementById('hotelName').value);
+            formData.append('StarRate', document.getElementById('rate').value);
+            formData.append('Price', document.getElementById('price').value);
+            formData.append('GoogleMapUrl', document.getElementById('mapUrl').value);
+            formData.append('Description', document.getElementById('description').value);
+            formData.append('CityId', document.getElementById('cityId').value);
+            formData.append('Image', document.getElementById('hotelImage').files[0]);
+    
+            try {
+                const res = await fetch(`${API_BASE}/api/Hotels`, { method: 'POST', body: formData });
+                const result = await res.json();
+                if (!res.ok) throw new Error(result.error || 'Failed to create hotel');
+                addHotelCard(result);
+                document.getElementById('hotelForm').reset();
+                alert('Hotel added!');
+            } catch (err) {
+                alert('Add failed: ' + err.message);
+            }
+        }
+    
+        async function loadHotels() {
+            try {
+                const res = await fetch(`${API_BASE}/api/Hotels`);
+                const hotels = await res.json();
+                document.getElementById('hotelGrid').innerHTML = '';
+                hotels.forEach(addHotelCard);
+            } catch (error) {
+                alert('Could not load hotels.');
+            }
+        }
+    
+        function addHotelCard(hotel) {
+            const card = document.createElement('div');
+            card.className = 'subcity-card';
+            card.dataset.id = hotel.id;
+            card.innerHTML = `
+                <img src="${API_BASE}${hotel.imagePath}" alt="${hotel.hotelName}">
+                <h3>${hotel.hotelName}</h3>
+                <p>${hotel.description}</p>
+                <p><strong>Rating:</strong> ${'⭐'.repeat(hotel.starRate)}</p>
+                <p><strong>Price:</strong> $${hotel.price.toFixed(2)}/night</p>
+                <a href="${hotel.googleMapUrl}" target="_blank">View on Map</a>
+                <br>
+                <br>
+                <div class="action-buttons">
+                    <button class="edit-btn">Edit</button>
+                    <button class="delete-btn">Delete</button>
+                </div>
+            `;
+            document.getElementById('hotelGrid').appendChild(card);
+        }
+    
+        async function handleCardActions(e) {
+            const card = e.target.closest('.subcity-card');
+            if (!card) return;
+            const id = card.dataset.id;
+    
+            if (e.target.classList.contains('delete-btn')) {
+                if (confirm('Delete this hotel?')) {
+                    await fetch(`${API_BASE}/api/Hotels/${id}`, { method: 'DELETE' });
+                    card.remove();
+                }
+            }
+    
+            if (e.target.classList.contains('edit-btn')) {
+                const res = await fetch(`${API_BASE}/api/Hotels/${id}`);
+                const hotel = await res.json();
+                openEditForm(hotel);
+            }
+        }
+    
+        function openEditForm(hotel) {
+    document.getElementById('editHotelName').value = hotel.hotelName;
+    document.getElementById('editRate').value = hotel.starRate;
+    document.getElementById('editPrice').value = hotel.price;
+    document.getElementById('editMapUrl').value = hotel.googleMapUrl;
+    document.getElementById('editDescription').value = hotel.description;
+    document.getElementById('editHotelId').value = hotel.id;
+
+    // Static city options (same as Add Hotel form)
+    const cities = [
+        { id: 1, name: "Erbil" },
+        { id: 2, name: "Sulaimani" },
+        { id: 3, name: "Halabja" },
+        { id: 4, name: "Duhok" }
+    ];
+
+    const citySelect = document.getElementById('editCityId');
+    citySelect.innerHTML = cities.map(city => `
+        <option value="${city.id}" ${city.id === hotel.cityId ? 'selected' : ''}>
+            ${city.name}
+        </option>
+    `).join('');
+
+    document.getElementById('editHotelPopup').style.display = 'flex';
+}
+
+
+    
+        async function handleEditHotel() {
+            const id = document.getElementById('editHotelId').value;
+            const formData = new FormData();
+            formData.append('HotelName', document.getElementById('editHotelName').value);
+            formData.append('StarRate', document.getElementById('editRate').value);
+            formData.append('Price', document.getElementById('editPrice').value);
+            formData.append('GoogleMapUrl', document.getElementById('editMapUrl').value);
+            formData.append('Description', document.getElementById('editDescription').value);
+            formData.append('CityId', document.getElementById('editCityId').value);
+    
+            const file = document.getElementById('editHotelImage').files[0];
+            if (file) formData.append('Image', file);
+    
+            try {
+                const res = await fetch(`${API_BASE}/api/Hotels/${id}`, {
+                    method: 'PUT',
+                    body: formData
+                });
+    
+                const result = await res.json();
+                if (!res.ok) throw new Error(result.error || 'Update failed');
+                alert('Hotel updated!');
+                document.getElementById('editHotelPopup').style.display = 'none';
+                loadHotels();
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+    
+        function setupFilterEvents() {
+            document.querySelectorAll('.city-checkbox').forEach(cb => {
+                cb.addEventListener('change', applyCityFilter);
+            });
+        }
+    
+        async function applyCityFilter() {
+            const ids = Array.from(document.querySelectorAll('.city-checkbox:checked'))
+                .map(cb => cb.dataset.cityId).join(',');
+            try {
+                const res = await fetch(`${API_BASE}/api/Hotels?cityIds=${ids}`);
+                const hotels = await res.json();
+                document.getElementById('hotelGrid').innerHTML = '';
+                hotels.forEach(addHotelCard);
+            } catch (err) {
+                alert('Could not filter hotels.');
+            }
+        }
+    </script>
+    
+    
+</body>
+
+</html>
