@@ -166,44 +166,6 @@ namespace InKurdistan.Migrations
 
                     b.ToTable("Users");
                 });
-
-            modelBuilder.Entity("InKurdistan.Models.Attraction", b =>
-                {
-                    b.HasOne("InKurdistan.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
-                });
-
-            modelBuilder.Entity("InKurdistan.Models.Hotel", b =>
-                {
-                    b.HasOne("InKurdistan.Models.City", "City")
-                        .WithMany("Hotels")
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
-                });
-
-            modelBuilder.Entity("InKurdistan.Models.SubCity", b =>
-                {
-                    b.HasOne("InKurdistan.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
-                });
-
-            modelBuilder.Entity("InKurdistan.Models.City", b =>
-                {
-                    b.Navigation("Hotels");
-                });
 #pragma warning restore 612, 618
         }
     }
