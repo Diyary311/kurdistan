@@ -27,5 +27,4 @@ dist-ssr
 # Visual Studio workspace files
 .vs/     
 
-.
-Migrations/
+.Migrations/
