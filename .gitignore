@@ -27,4 +27,8 @@ dist-ssr
 # Visual Studio workspace files
 .vs/     
 
-.Migrations/
+backend/InKurdistan/Migrations/
+
+# Ignore all images inside wwwroot/images (and subfolders)
+backend/InKurdistan/wwwroot/images/
+
