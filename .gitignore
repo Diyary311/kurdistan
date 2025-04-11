@@ -25,4 +25,7 @@ dist-ssr
 *.sw?
 
 # Visual Studio workspace files
-.vs/        
+.vs/     
+
+.
+Migrations/
