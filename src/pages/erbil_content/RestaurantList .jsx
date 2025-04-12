@@ -11,12 +11,7 @@ const RestaurantList = () => {
   }, []);
 
   {
-    /*useEffect(() => {
-    fetch('http://localhost:5000/restaurants') // Replace with your API
-      .then((response) => response.json())
-      .then((data) => setRestaurants(data))
-      .catch((error) => console.error('Error fetching data:', error));
-  }, []);*/
+    
   }
 
   return (

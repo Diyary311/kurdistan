@@ -25,4 +25,10 @@ dist-ssr
 *.sw?
 
 # Visual Studio workspace files
-.vs/        
+.vs/     
+
+backend/InKurdistan/Migrations/
+
+# Ignore all images inside wwwroot/images (and subfolders)
+backend/InKurdistan/wwwroot/images/
+

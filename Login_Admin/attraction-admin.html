@@ -1,31 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attraction Management</title>
+    <script>
+        const API_BASE = 'http://localhost:5000';
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAttractions();
+            setupFormEvents();
+            setupFilterEvents();
+        });
+    
+        function setupFormEvents() {
+            // Add Attraction
+            document.getElementById('attractionForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+    
+                const formData = new FormData();
+                formData.append('Name', document.getElementById('attractionName').value);
+                formData.append('Description', document.getElementById('description').value);
+                formData.append('Image', document.getElementById('attractionImage').files[0]);
+                formData.append('CityId', document.getElementById('attractionCity').value);
+    
+                try {
+                    const response = await fetch(`${API_BASE}/api/Attractions`, {
+                        method: 'POST',
+                        body: formData
+                    });
+    
+                    if (!response.ok) throw new Error('Server error');
+    
+                    const newAttraction = await response.json();
+                    addAttractionCard(newAttraction);
+                    document.getElementById('attractionForm').reset();
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error saving attraction');
+                }
+            });
+    
+            // Edit & Delete
+            document.querySelector('.attraction-grid').addEventListener('click', async (e) => {
+                const card = e.target.closest('.attraction-card');
+                if (!card) return;
+                const id = card.dataset.id;
+    
+                if (e.target.classList.contains('delete-btn')) {
+                    if (confirm('Delete this attraction?')) {
+                        try {
+                            const response = await fetch(`${API_BASE}/api/Attractions/${id}`, {
+                                method: 'DELETE'
+                            });
+    
+                            if (!response.ok) throw new Error('Delete failed');
+                            card.remove();
+                        } catch (error) {
+                            console.error('Delete error:', error);
+                            alert('Error deleting attraction: ' + error.message);
+                        }
+                    }
+                }
+    
+                if (e.target.classList.contains('edit-btn')) {
+                    const response = await fetch(`${API_BASE}/api/Attractions/${id}`);
+                    const attraction = await response.json();
+    
+                    document.getElementById('editAttractionName').value = attraction.name;
+                    document.getElementById('editDescription').value = attraction.description;
+                    document.getElementById('editAttractionId').value = attraction.id;
+                    document.getElementById('editAttractionCity').value = attraction.cityId;
+    
+                    document.getElementById('editAttractionFormPopup').style.display = 'flex';
+                }
+            });
+    
+            document.getElementById('submitEdit').addEventListener('click', async (e) => {
+                e.preventDefault();
+    
+                const formData = new FormData();
+                formData.append('Name', document.getElementById('editAttractionName').value);
+                formData.append('Description', document.getElementById('editDescription').value);
+    
+                const imageFile = document.getElementById('editAttractionImage').files[0];
+                if (imageFile) {
+                    formData.append('Image', imageFile);
+                }
+    
+                formData.append('CityId', document.getElementById('editAttractionCity').value);
+    
+                const id = document.getElementById('editAttractionId').value;
+    
+                try {
+                    const response = await fetch(`${API_BASE}/api/Attractions/${id}`, {
+                        method: 'PUT',
+                        body: formData
+                    });
+    
+                    if (!response.ok) throw new Error('Server error');
+    
+                    const updatedAttraction = await response.json();
+                    updateAttractionCard(updatedAttraction);
+    
+                    document.getElementById('editAttractionFormPopup').style.display = 'none';
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error updating attraction');
+                }
+            });
+    
+            document.getElementById('cancelEdit').addEventListener('click', () => {
+                document.getElementById('editAttractionFormPopup').style.display = 'none';
+            });
+        }
+    
+        function addAttractionCard(attraction) {
+            const grid = document.querySelector('.attraction-grid');
+            const card = document.createElement('div');
+            card.className = 'attraction-card';
+            card.dataset.id = attraction.id;
+            card.innerHTML = `
+                <img src="${API_BASE}${attraction.imagePath}" alt="${attraction.name}">
+                <h3>${attraction.name}</h3>
+                <p>${attraction.description}</p>
+                <div class="action-buttons">
+                    <button class="edit-btn">Edit</button>
+                    <button class="delete-btn">Delete</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        }
+    
+        function updateAttractionCard(attraction) {
+            const card = document.querySelector(`.attraction-card[data-id="${attraction.id}"]`);
+            if (!card) return;
+            card.querySelector('h3').innerText = attraction.name;
+            card.querySelector('p').innerText = attraction.description;
+            card.querySelector('img').src = `${API_BASE}${attraction.imagePath}`;
+        }
+    
+        async function loadAttractions(cityFilter = '') {
+            try {
+                const res = await fetch(`${API_BASE}/api/Attractions${cityFilter ? '?cityIds=' + cityFilter : ''}`);
+                if (!res.ok) throw new Error('Failed to load attractions');
+    
+                const attractions = await res.json();
+                const grid = document.querySelector('.attraction-grid');
+                grid.innerHTML = '';
+                attractions.forEach(addAttractionCard);
+            } catch (error) {
+                console.error('Loading error:', error);
+                alert('Error loading attractions: ' + error.message);
+            }
+        }
+    
+        function setupFilterEvents() {
+            const checkboxes = document.querySelectorAll('.city-checkbox');
+            checkboxes.forEach(cb => cb.addEventListener('change', applyAttractionFilter));
+        }
+    
+        function applyAttractionFilter() {
+            const selectedIds = Array.from(document.querySelectorAll('.city-checkbox:checked'))
+                .map(cb => cb.dataset.cityId)
+                .join(',');
+            loadAttractions(selectedIds);
+        }
+    </script>
+    
+
     <style>
-        /* Shared Admin Styles */
+        /* Navigation Styles */
         .admin-nav {
             background-color: #2c3e50;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .nav-links {
-    display: flex;
-    gap: 15px;
-}
+            display: flex;
+            gap: 15px;
+        }
 
-        
         .admin-nav a {
             color: white;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 8px 16px;
-    border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 4px;
         }
 
         .admin-nav a:hover {
@@ -40,16 +205,20 @@
         }
 
         .home-link {
-    background-color: #f39c12; /* orange-ish color */
-    color: black;
-}
+            background-color: #f39c12;
+            color: black;
+        }
 
-        /* Unified Form Styles */
-        .management-form {
+        .admin-nav a[href="attraction-admin.html"] {
+            background: #4CAF50;
+        }
+
+        /* Form Styles */
+        .attraction-form {
             background: white;
             padding: 2rem;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 2rem;
         }
 
@@ -71,21 +240,22 @@
             border-radius: 4px;
         }
 
-        /* Unified Grid Styles */
-        .content-grid {
+        /* Grid Layout */
+        .attraction-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2rem;
+            margin-top: 2rem;
         }
 
-        .content-card {
+        .attraction-card {
             background: white;
             padding: 1rem;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .content-card img {
+        .attraction-card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
@@ -93,7 +263,6 @@
             margin-bottom: 1rem;
         }
 
-        /* Unified Button Styles */
         button {
             padding: 0.5rem 1rem;
             font-size: 1em;
@@ -110,53 +279,197 @@
             transform: translateY(-2px);
         }
 
-        .admin-nav a[href="attraction-admin.html"] {
-    background: #4CAF50;
-}
+        /* Styles for the popout form */
+        #editAttractionFormPopup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 400px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            font-size: 1em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #4CAF50;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .city-filters {
+            background: #2c3e50;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            height: 15px;
+            color: white;
+        }
+
+        .city-filters label {
+            display: inline-block;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 14px;
+
+        }
+
+        .city-filters input[type="checkbox"] {
+            margin-right: 5px;
+            transform: scale(0.9);
+            /* Make checkboxes smaller */
+        }
+
+        .filter-error {
+            color: red;
+            padding: 1rem;
+        }
     </style>
 </head>
+
 <body>
     <nav class="admin-nav">
         <a href="http://localhost:5173" class="home-link">Home</a>
         <div class="nav-links">
             <a href="subcity-admin.html">Subcities</a>
-            <a href="attraction-admin.html">Attractions</a>
+            <a href="attraction-admin.html" background: #4CAF50>Attractions</a>
+            <a href="hotel-admin.html">Hotels</a>
             <a href="admin-panel.html">Users</a>
         </div>
     </nav>
 
     <div class="admin-container">
         <h1>Attraction Management</h1>
-        
-        <!-- Add Attraction Form -->
-        <div class="management-form">
+
+        <form id="attractionForm" class="attraction-form">
             <h2>Add New Attraction</h2>
-            <form id="attractionForm">
-                <div class="form-group">
-                    <label>Attraction Name:</label>
-                    <input type="text" id="attractionName" required>
-                </div>
-                <div class="form-group">
-                    <label>Upload Image:</label>
-                    <input type="file" id="attractionImage" accept="image/*" required>
-                </div>
-                <button type="submit">Add Attraction</button>
-            </form>
+            <div class="form-group">
+                <label for="attractionName">Attraction Name</label>
+                <input type="text" id="attractionName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="attractionImage">Image</label>
+                <input type="file" id="attractionImage" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" id="description" required>
+            </div>
+
+
+            <div class="form-group">
+                <label for="attractionCity">City</label>
+                <select id="attractionCity" required>
+                    <option value="">Select a City</option>
+                    <option value="1">Erbil</option>
+                    <option value="2">Sulaimani</option>
+                    <option value="3">Halabja</option>
+                    <option value="4">Duhok</option>
+                </select>
+            </div>
+
+
+            <button type="submit">Add Attraction</button>
+        </form>
+
+        <!-- City Filter Section -->
+        <div class="city-filters">
+            <h2>Filter by City</h2>
+            <label>
+                <input type="checkbox" class="city-checkbox" data-city-id="1" checked> Erbil
+            </label>
+            <label>
+                <input type="checkbox" class="city-checkbox" data-city-id="2" checked> Sulaimani
+            </label>
+            <label>
+                <input type="checkbox" class="city-checkbox" data-city-id="3" checked> Halabja
+            </label>
+            <label>
+                <input type="checkbox" class="city-checkbox" data-city-id="4" checked> Duhok
+            </label>
         </div>
 
-        <!-- Attractions Grid -->
-        <div class="content-grid">
-            <!-- Example Card -->
-            <div class="content-card">
-                <img src="placeholder.jpg" alt="Attraction Image">
-                <h3>Historic Castle</h3>
-                <p>Ancient fortress with panoramic views</p>
-                <div class="action-buttons">
-                    <button>Edit</button>
-                    <button>Delete</button>
+
+
+        <div class="attraction-grid">
+            <!-- Attraction cards will be added here -->
+        </div>
+
+        <!-- Popout Edit Form -->
+        <div id="editAttractionFormPopup" style="display: none;">
+            <div class="form-container">
+                <h2>Edit Attraction</h2>
+                <div class="form-group">
+                    <label for="editAttractionName">Attraction Name</label>
+                    <input type="text" id="editAttractionName" required>
                 </div>
+
+                <div class="form-group">
+                    <label for="editAttractionImage">Image</label>
+                    <input type="file" id="editAttractionImage">
+                </div>
+
+                <div class="form-group">
+                    <label for="editDescription">Description</label>
+                    <input type="text" id="editDescription" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editAttractionCity">City</label>
+                    <select id="editAttractionCity" required>
+                        <option value="1">Erbil</option>
+                        <option value="2">Sulaimani</option>
+                        <option value="3">Halabja</option>
+                        <option value="4">Duhok</option>
+                    </select>
+                </div>
+
+
+                <input type="hidden" id="editAttractionId">
+                <button id="submitEdit">Submit Edit</button>
+                <button id="cancelEdit">Cancel</button>
             </div>
         </div>
     </div>
 </body>
+
 </html>

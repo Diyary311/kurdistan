@@ -1,50 +1,37 @@
-import React from 'react';
-
-// Data for attractions
-const attractions = [
-  {
-    name: 'Erbil Citadel',
-    image: 'src/assets/images/erbil/144108d3717e9fd54327730779413f3c.jpg',
-    description:
-      "The heart of the city's history, a UNESCO World Heritage Site.",
-  },
-  {
-    name: 'Sami Abdulrahman Park',
-    image: 'src/assets/images/erbil/sami.jpg',
-    description:
-      'One of the largest parks in the Middle East, perfect for relaxation.',
-  },
-  {
-    name: 'Jalil Khayat Mosque',
-    image: 'src/assets/images/erbil/jalil khayat.jpg',
-    description: 'A stunning piece of Islamic architecture in Erbil.',
-  },
-  {
-    name: 'Erbil Bazaar',
-    image: 'src/assets/images/erbil/erbil.jpg',
-    description: 'A lively market offering traditional Kurdish goods.',
-  },
-  {
-    name: 'Family Mall & Majidi Mall',
-    image: 'src/assets/images/erbil/Family Mall & Majidi Mall.jpg',
-    description: 'Modern shopping centers for entertainment and retail.',
-  },
-];
+import React, { useState, useEffect } from 'react';
 
 const MainAttractions = () => {
+  const [attractions, setAttractions] = useState([]);
+  const API_BASE = 'http://localhost:5000';
+
+  useEffect(() => {
+    const fetchAttractions = async () => {
+      try {
+        const response = await fetch(`${API_BASE}/api/Attractions?cityIds=1`);
+        if (!response.ok) throw new Error('Failed to fetch attractions');
+        const data = await response.json();
+        setAttractions(data);
+      } catch (error) {
+        console.error('Error fetching attractions:', error);
+      }
+    };
+
+    fetchAttractions();
+  }, []);
+
   return (
     <section className="mt-10 text-center">
       <h2 className="mb-6 text-2xl font-semibold text-green-400">
         Main Attractions
       </h2>
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-        {attractions.map((attraction, index) => (
+        {attractions.map((attraction) => (
           <div
-            key={index}
+            key={attraction.id}
             className="overflow-hidden rounded-lg border border-white bg-black bg-opacity-30 shadow-lg"
           >
             <img
-              src={attraction.image}
+              src={`${API_BASE}${attraction.imagePath}`}
               alt={attraction.name}
               className="h-48 w-full object-cover"
             />
