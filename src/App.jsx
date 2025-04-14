@@ -6,19 +6,26 @@ import Resturants from './pages/erbil_content/resturants';
 import HistoryContent from './pages/HistoryAndCulture_Components/historyContent';
 import Hotel from './pages/erbil_content/Hotel/Hotel';
 import Subcity from './pages/erbil_content/Subcity/Subcity';
+import Suli from './pages/Suli_content/Suli';
+import Suli_resturant from './pages/Suli_content/Suli_resturant.jsx';
+
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/Culture&History" element={<HistoryContent />} />
-        <Route path="/Erbil" element={<Erbil />} />
 
-        <Route path="/resturants" element={<Resturants />} />
+        {/* Erbil Section */}
+        <Route path="/erbil" element={<Erbil />} />
+        <Route path="/erbil/restaurants" element={<Resturants />} />
+        <Route path="/erbil/hotels" element={<Hotel />} />
+        <Route path="/erbil/subcity" element={<Subcity />} />
 
-        <Route path="/hotels" element={<Hotel />} />
-
-        <Route path="/subcity" element={<Subcity />} />
+        {/* Suli Section */}
+        <Route path="/suli" element={<Suli />} />
+        <Route path="/suli/restaurants" element={<Suli_resturant />} />
+        {/* Add Hotel and Subcity components for Suli too if needed */}
       </Routes>
     </Router>
   );

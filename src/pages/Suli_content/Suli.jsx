@@ -1,20 +1,16 @@
+import Navbar from '../../homee/Navbar.jsx';
 import React, { useState, useEffect } from 'react';
-import './erbilsyle.css';
-import Navbar from '../homee/Navbar';
-import MainAttractions from './erbil_content/mainattraction';
-
-import Buttons from './erbil_content/buttons';
-
-const Erbil = () => {
+import Buttons from '../erbil_content/buttons.jsx';
+import './Suli.css';
+function Suli() {
   const imagePath = [
-    { src: 'src/assets/images/erbil/Erbil Citadel.jpg' },
-    { src: 'src/assets/images/erbil/Erbil Kurdistan.jpg' },
+    { src: 'src/assets/images/Suli/5fa3b27f1c8af46c7bf2e36dbee2b2bd.jpg' },
+    { src: 'src/assets/images/Suli/39e83f59c39e08e7f96653cc73080bff.jpg' },
     {
-      src: 'src/assets/images/erbil/Hawlerclocktower - Kurdistan پایتەختی کوردستان.jpg',
+      src: 'src/assets/images/Suli/5553c34829dc40f9493d864dfa61d352.jpg',
     },
-
     {
-      src: 'src/assets/images/erbil/اللهم احفظها 😍.jpg',
+      src: 'src/assets/images/Suli/7848a36bdb6f3d66f5cbf5ec085eb8f7.jpg',
     },
   ];
 
@@ -39,12 +35,11 @@ const Erbil = () => {
     <div>
       <Navbar />
       <div className="title" data-aos="fade-up" data-aos-fadeduration="1600">
-        <h1 className="absolute left-1/2 top-0 mb-24 mt-20 -translate-x-1/2 transform text-center text-5xl font-bold text-green-500">
-          Erbil
+        <h1 className="absolute left-1/2 top-0 mt-20 -translate-x-1/2 transform text-center text-5xl font-bold text-green-500">
+          Sulaymaniyah
         </h1>
 
         <section className="images relative mt-32 flex items-center justify-center">
-          {/* Previous Button */}
           <button
             onClick={prevSlide}
             className="absolute left-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black bg-opacity-60 text-white shadow-lg transition-all hover:scale-110"
@@ -52,16 +47,14 @@ const Erbil = () => {
             ◀
           </button>
 
-          {/* Image Container */}
-          <div className="relative w-full max-w-5xl overflow-hidden rounded-2xl border border-gray-700 shadow-lg">
+          <div className="relative mt-10 w-full max-w-5xl overflow-hidden rounded-2xl border border-gray-700 shadow-lg">
             <img
               src={imagePath[currentIndex].src}
-              alt="Erbil"
+              alt="Sulaymaniyah"
               className="h-[450px] w-full object-cover transition-all duration-500 hover:scale-105"
             />
           </div>
 
-          {/* Next Button */}
           <button
             onClick={nextSlide}
             className="absolute right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black bg-opacity-60 text-white shadow-lg transition-all hover:scale-110"
@@ -70,36 +63,35 @@ const Erbil = () => {
           </button>
         </section>
 
-        {/* about section */}
-
         <section className="text- mt-32 text-center text-lg">
           <h1
             className="h1 w-fit rounded-lg border border-white bg-black bg-opacity-30 px-4 py-2 font-bold text-green-500"
             data-aos="fade-up"
             data-aos-fadeduration="1800"
           >
-            About Erbil
+            About Sulaymaniyah
           </h1>
 
           <div className="mx-auto mt-6 max-w-3xl text-left leading-relaxed text-white">
             <p>
-              <strong>Erbil</strong>, also known as <strong>Hawler</strong>, is
-              the capital and largest city of the Kurdistan Region of Iraq. With
-              a history spanning over <strong>6,000 years</strong>, it is one of
-              the{' '}
+              <strong>Sulaymaniyah</strong>, also known as{' '}
+              <strong>Slemani</strong>, is a major city in the Kurdistan Region
+              of Iraq. With a history spanning over <strong>6,000 years</strong>
+              , it is one of the{' '}
               <strong>oldest continuously inhabited cities in the world</strong>
-              . Erbil blends ancient heritage with modern urban development,
-              offering a unique experience to visitors and residents alike.
+              . Sulaymaniyah blends ancient heritage with modern urban
+              development, offering a unique experience to visitors and
+              residents alike.
             </p>
 
             <h2 className="mt-4 text-xl font-semibold text-green-400">
-              Why Visit Erbil?
+              Why Visit Sulaymaniyah?
             </h2>
             <p>
-              Erbil is a city that offers a perfect mix of{' '}
+              Sulaymaniyah is a city that offers a perfect mix of{' '}
               <strong>history, culture, and modernity</strong>. Whether you're
               interested in exploring ancient sites, experiencing Kurdish
-              hospitality, or witnessing the city's rapid development, Erbil is
+              hospitality, or enjoying the natural surroundings, Sulaymaniyah is
               a destination worth visiting.
             </p>
 
@@ -107,11 +99,10 @@ const Erbil = () => {
               Geographical Location
             </h2>
             <p>
-              Erbil is located in <strong>northern Iraq</strong>, approximately{' '}
-              <strong>350 km north of Baghdad</strong>. The city lies at the
-              center of a fertile plain and is surrounded by rolling hills and
-              mountains, making it a key economic and cultural hub in the
-              region.
+              Sulaymaniyah is located in <strong>northeastern Iraq</strong>,
+              approximately <strong>330 km northeast of Baghdad</strong>. The
+              city lies in a mountainous region, making it a key cultural and
+              educational hub in the region.
             </p>
 
             <h2 className="mt-4 text-xl font-semibold text-green-400">
@@ -120,10 +111,10 @@ const Erbil = () => {
             <ul className="list-inside list-disc">
               <li>
                 <strong>Population:</strong> Approximately{' '}
-                <strong>1.6 million</strong> people.
+                <strong>900,000</strong> people.
               </li>
               <li>
-                <strong>Area:</strong> Around <strong>15,000 km²</strong>,
+                <strong>Area:</strong> Around <strong>7,000 km²</strong>,
                 covering both urban and rural areas.
               </li>
             </ul>
@@ -132,12 +123,12 @@ const Erbil = () => {
               Historic and Cultural Significance
             </h2>
             <p>
-              Erbil is home to the <strong>Erbil Citadel</strong>, a UNESCO
-              World Heritage Site, which has been continuously inhabited for
-              thousands of years. The city’s rich history is reflected in its
-              ancient markets, traditional Kurdish architecture, and museums
-              showcasing artifacts from various civilizations, including the
-              Sumerians, Assyrians, and Ottomans.
+              Sulaymaniyah is home to the <strong>Amna Suraka Museum</strong>, a
+              historical site that tells the story of the Kurdish struggle. The
+              city’s rich history is reflected in its cultural institutions,
+              traditional Kurdish architecture, and museums showcasing artifacts
+              from various civilizations, including the Sumerians, Assyrians,
+              and Ottomans.
             </p>
 
             <h2 className="mt-4 text-xl font-semibold text-green-400">
@@ -145,24 +136,24 @@ const Erbil = () => {
             </h2>
             <ul className="list-inside list-disc">
               <li>
-                <strong>Ainkawa</strong> – A vibrant district known for its
-                diverse community, restaurants, and nightlife.
+                <strong>Salim Street</strong> – A vibrant district known for its
+                shops, cafés, and local activity.
               </li>
               <li>
-                <strong>Gulan Street</strong> – A major commercial area filled
-                with high-end shops, cafes, and offices.
+                <strong>Sarchinar</strong> – A natural retreat with parks and
+                recreation.
               </li>
               <li>
-                <strong>100 Meter Road</strong> – One of the largest roads in
-                Erbil, surrounding the city with modern developments.
+                <strong>Chwar Bakh</strong> – Known for its residential and
+                educational facilities.
               </li>
               <li>
-                <strong>Khabat</strong> – A growing residential and business
-                district.
+                <strong>Bakrajo</strong> – A district popular among students and
+                professionals.
               </li>
               <li>
-                <strong>Salahaddin</strong> – A peaceful area with universities,
-                parks, and recreational spaces.
+                <strong>Raparin</strong> – A cultural and historical hub of the
+                city.
               </li>
             </ul>
 
@@ -170,31 +161,29 @@ const Erbil = () => {
               Climate
             </h2>
             <p>
-              Erbil has a <strong>semi-arid climate</strong>, characterized by{' '}
-              <strong>hot summers and mild winters</strong>.
+              Sulaymaniyah has a <strong>semi-arid climate</strong>,
+              characterized by <strong>hot summers and cold winters</strong>.
             </p>
             <ul className="list-inside list-disc">
               <li>
                 <strong>Summer temperatures:</strong> Can reach{' '}
-                <strong>45°C (113°F)</strong>.
+                <strong>40°C (104°F)</strong>.
               </li>
               <li>
                 <strong>Winter temperatures:</strong> Range between{' '}
-                <strong>5°C and 15°C (41°F – 59°F)</strong>, with occasional
-                rainfall.
+                <strong>0°C and 10°C (32°F – 50°F)</strong>, with occasional
+                snowfall and rainfall.
               </li>
             </ul>
-            <MainAttractions />
           </div>
         </section>
 
-        {/*button section */}
         <div className="container ml-9 mt-16 items-center justify-center">
-          <Buttons city="erbil" />
+          <Buttons city="suli" />
         </div>
       </div>
     </div>
   );
-};
+}
 
-export default Erbil;
+export default Suli;

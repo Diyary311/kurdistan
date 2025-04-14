@@ -76,7 +76,11 @@ function Home() {
               alt: 'Erbil',
               path: '/erbil',
             },
-            { src: 'src/assets/images/suli.jpg', alt: 'Sulaimani', path: '' },
+            {
+              src: 'src/assets/images/suli.jpg',
+              alt: 'Sulaimani',
+              path: '/suli',
+            },
             { src: 'src/assets/images/duhok.jpg', alt: 'Duhok', path: '' },
             { src: 'src/assets/images/halabja.jpg', alt: 'Halabja', path: '' },
           ].map((city, index) => (

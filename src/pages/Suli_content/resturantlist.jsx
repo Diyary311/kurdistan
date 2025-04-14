@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MapComponent from '../MapComponent';
-import restaurantData from './resturanlocation.json'; // Import JSON data
+import restaurantData from './suli_resturant.json'; // Import your restaurant data
 import 'leaflet/dist/leaflet.css'; // Import Leaflet CSS
 
 const RestaurantList = () => {

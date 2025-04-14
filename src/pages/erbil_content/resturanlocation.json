@@ -4,8 +4,8 @@
     "name": "Basilico",
     "cuisine": "Italian, European",
     "location": "Empire Street, Erbil, Iraq",
-    "lat": 36.190889,
-    "lng": 44.007663,
+    "lat": 36.19257,
+    "lng": 44.010624,
     "image": "src/pages/erbil_content/images/basilico-the-italian.webp"
   },
   {
@@ -13,8 +13,8 @@
     "name": "Buffalo Wings & Rings",
     "cuisine": "American, Bar",
     "location": "Gulan Street, Erbil, Iraq",
-    "lat": 36.201565,
-    "lng": 44.009234,
+    "lat": 36.2080053,
+    "lng": 43.9739698,
     "image": "src/pages/erbil_content/images/AF1QipP30jVjO8EouZI1iznsalMjB07NwSqWA_BaV39A=w480-h300-k-n-rw.webp"
   },
   {
@@ -22,8 +22,9 @@
     "name": "Café Moka",
     "cuisine": "Cafe, International",
     "location": "Gulan Street, Erbil, Iraq",
-    "lat": 36.201565,
-    "lng": 44.009234,
+    "lat": 36.2061,
+    "lng": 43.9946,
+
     "image": "src/pages/erbil_content/images/chefs-salad.jpg"
   },
   {
@@ -40,8 +41,8 @@
     "name": "Sushi House",
     "cuisine": "Japanese, Sushi",
     "location": "Gulan Street, Erbil, Iraq",
-    "lat": 36.201565,
-    "lng": 44.009234,
+    "lat": 36.2358,
+    "lng": 43.9578,
     "image": "src/pages/erbil_content/images/20210227-210307-largejpg.jpg"
   },
 

@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "name": "Barbera Cafe",
+    "cuisine": "Italian, Cafe, European",
+    "location": "Central District, Sulaymaniyah, Iraq",
+    "lat": 35.573571276379845,
+    "lng": 45.45708831134352,
+    "image": "src/pages/sulaymaniyah_content/images/barbera-cafe.webp"
+  },
+  {
+    "id": 2,
+    "name": "360 Restaurant",
+    "cuisine": "Arabic, International",
+    "location": "Sulaymaniyah, Iraq",
+    "lat": 35.57148455394982,
+    "lng": 45.406868638329044,
+    "image": "src/pages/sulaymaniyah_content/images/360-restaurant.webp"
+  },
+  {
+    "id": 3,
+    "name": "Roma Restaurant",
+    "cuisine": "Italian",
+    "location": "Family Mall, Sulaymaniyah, Iraq",
+    "lat": 35.5681550000467,
+    "lng": 45.37348150962273,
+    "image": "src/pages/sulaymaniyah_content/images/roma-restaurant.webp"
+  },
+  {
+    "id": 4,
+    "name": "Pronto",
+    "cuisine": "Italian, Pizza",
+    "location": "Sulaymaniyah, Iraq",
+    "lat": 35.52195528288026,
+    "lng": 45.43462723779706,
+    "image": "src/pages/sulaymaniyah_content/images/pronto.webp"
+  },
+  {
+    "id": 5,
+    "name": "Moka & More Sulaimani",
+    "cuisine": "Italian, American, Lebanese, Mediterranean",
+    "location": "Sulaymaniyah, Iraq",
+    "lat": 35.56254749267303,
+    "lng": 45.4301000282975,
+    "image": "src/pages/sulaymaniyah_content/images/moka-more.webp"
+  },
+  {
+    "id": 6,
+    "name": "Downtown",
+    "cuisine": "International",
+    "location": "Sulaymaniyah, Iraq",
+    "lat": 35.57810231918401,
+    "lng": 45.38649499879548,
+    "image": "src/pages/sulaymaniyah_content/images/downtown.webp"
+  }
+]
