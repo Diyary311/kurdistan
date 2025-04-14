@@ -18,6 +18,8 @@ namespace InKurdistan.Data
         public DbSet<SubCity> SubCities { get; set; }
         public DbSet<Attraction> Attractions { get; set; }
         public DbSet<Hotel> Hotels { get; set; }
+        public DbSet<Restaurant> Restaurants { get; set; }
+
 
     }
 }
