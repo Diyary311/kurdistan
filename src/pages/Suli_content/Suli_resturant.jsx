@@ -13,7 +13,7 @@ function Suli_resturant() {
         <h1
           data-aos="fade-up"
           data-aos-fadeduration="1800"
-          className="mb-8 mt-32 text-center text-3xl font-bold text-green-500 sm:text-4xl md:text-5xl"
+          className="resturant_title mb-8 mt-32 text-center text-3xl font-bold text-green-500 sm:text-4xl md:text-5xl"
         >
           Restaurants in Sulaimaniyah
         </h1>
