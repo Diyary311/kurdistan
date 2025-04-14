@@ -4,14 +4,14 @@ import PropTypes from 'prop-types';
 // Individual hotel card
 const HotelCard = ({ hotel }) => {
   return (
-    <div className="w-full h-full rounded-lg border p-4 shadow-md transition hover:shadow-lg">
+    <div className="h-full w-full rounded-lg border p-4 shadow-md transition hover:shadow-lg">
       <img
         src={`http://localhost:5000${hotel.imagePath}`}
         alt={hotel.hotelName}
         className="h-40 w-full rounded-md object-cover"
       />
       <h2 className="mt-2 text-xl font-bold">{hotel.hotelName}</h2>
-<br />
+      <br />
       <p className="text-slate-600">{hotel.description}</p>
       <br />
       <p className="mt-1">
@@ -47,7 +47,7 @@ const HotelCards = ({ cityId }) => {
 
   return (
     <div className="items-center justify-center px-4 md:px-8">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {hotels.map((hotel, index) => (
           <HotelCard key={index} hotel={hotel} />
         ))}

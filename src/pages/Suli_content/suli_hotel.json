@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "name": "Grand Millennium Sulaimani",
+    "lat": 35.5582,
+    "lng": 45.4366,
+    "address": "Sulaimani, Iraq",
+    "star_rating": 5,
+    "image": "src/assets/grand_millennium_sulaimani.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Ramada by Wyndham Sulaimani Salim Street",
+    "lat": 35.56,
+    "lng": 45.434,
+    "address": "Salim Street, Sulaimani, Iraq",
+    "star_rating": 4,
+    "image": "src/assets/ramada_sulaimani.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Copthorne Hotel Baranan",
+    "lat": 35.557,
+    "lng": 45.435,
+    "address": "Sulaimani, Iraq",
+    "star_rating": 5,
+    "image": "src/assets/copthorne_baranan.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Titan Hotel",
+    "lat": 35.559,
+    "lng": 45.437,
+    "address": "Sulaimani, Iraq",
+    "star_rating": 3,
+    "image": "src/assets/titan_hotel.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Diyar Hotel",
+    "lat": 35.556,
+    "lng": 45.433,
+    "address": "Sulaimani, Iraq",
+    "star_rating": 3,
+    "image": "src/assets/diyar_hotel.jpg"
+  }
+]

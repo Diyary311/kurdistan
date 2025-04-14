@@ -8,7 +8,7 @@ import Hotel from './pages/erbil_content/Hotel/Hotel';
 import Subcity from './pages/erbil_content/Subcity/Subcity';
 import Suli from './pages/Suli_content/Suli';
 import Suli_resturant from './pages/Suli_content/Suli_resturant.jsx';
-
+import Suli_Hotel from './pages/Suli_content/Hotel.jsx';
 function App() {
   return (
     <Router>
@@ -25,6 +25,7 @@ function App() {
         {/* Suli Section */}
         <Route path="/suli" element={<Suli />} />
         <Route path="/suli/restaurants" element={<Suli_resturant />} />
+        <Route path="/suli/hotels" element={<Suli_Hotel />} />
         {/* Add Hotel and Subcity components for Suli too if needed */}
       </Routes>
     </Router>
