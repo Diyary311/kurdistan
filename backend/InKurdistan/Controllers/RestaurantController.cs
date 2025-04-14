@@ -64,12 +64,20 @@ namespace InKurdistan.Controllers
             return Ok(await query.ToListAsync());
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetRestaurant(int id)
+        [HttpGet("{id}/{type}")]
+        public async Task<IActionResult> GetRestaurantsByCityAndType(int id, string type)
         {
-            var res = await _context.Restaurants.FindAsync(id);
-            return res == null ? NotFound() : Ok(res);
+            var list = await _context.Restaurants
+                .Where(r => r.CityId == id &&
+                            r.Type.ToLower().Trim() == type.ToLower().Trim())
+                .ToListAsync();
+
+            if (list == null || list.Count == 0)
+                return NotFound($"No restaurants found in city {id} with type '{type}'.");
+
+            return Ok(list);
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRestaurant(int id, [FromForm] RestaurantDto dto)

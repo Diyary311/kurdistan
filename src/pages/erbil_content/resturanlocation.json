@@ -35,24 +35,5 @@
     "lat": 36.190889,
     "lng": 44.007663,
     "image": "src/pages/erbil_content/images/abu-shahab-city.jpg"
-  },
-  {
-    "id": 5,
-    "name": "Sushi House",
-    "cuisine": "Japanese, Sushi",
-    "location": "Gulan Street, Erbil, Iraq",
-    "lat": 36.2358,
-    "lng": 43.9578,
-    "image": "src/pages/erbil_content/images/20210227-210307-largejpg.jpg"
-  },
-
-  {
-    "id": 6,
-    "name": "The Courtyard Restaurant",
-    "cuisine": "Arabic",
-    "location": "Golan Street Infront Of Zakaria Apartments, Erbil 44001 Iraq",
-    "lat": 36.201565,
-    "lng": 44.009234,
-    "image": "src/pages/erbil_content/images/caption.jpg"
   }
 ]
